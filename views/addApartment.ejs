@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body>
+    <!-- <ul>
+        <li>
+            <% if (!user || !user.photo) { %>
+                <button onclick="window.location.href='/auth/google'" title="Iniciar sesión">🔑</button>
+                <% } %>
+        </li>
+        <li>
+            <% if (user) { %>
+                <button onclick="window.location.href='/logout'" title="Cerrar sesión">
+                    <% if (user.photo && user.photo.trim() !=="" ) { %>
+                        <img src="<%= user.photo %>" alt="Logout"
+                            style="width: 28px; height: 28px; border-radius: 50%;">
+                        <% } else { %>
+                            <i class="fas fa-user" style="font-size: 1.2rem;"></i>
+                            <% } %>
+                </button>
+                <% } %>
+        </li>
+    </ul> -->
+    <h1>Bienvenidos a <%= title %>
+    </h1>
+    <div class="container">
+        <h2>Añadir uevo apartamento</h2>
+        <form action="/admin/apartment" method="post">
+
+            <label for="title">Título del apartamento</label>
+            <input type="text" name="title" id="title" required />
+
+            <label for="description">Descripción</label>
+            <textarea name="description" id="description" required></textarea>
+
+
+            <div id="rulesContainer"></div>
+            <!-- <label for="rules">Reglas (separadas por comas)</label>
+            <input type="text" name="rules" id="rules" placeholder="Ej: No fumar, No mascotas" /> -->
+            <button type="button" onclick="addRuleField()">+ Añadir norma</button>
+
+            <label for="rooms">Número de habitaciones</label>
+            <input type="number" name="rooms" id="rooms" min="1" required />
+            <div id="bedsContainer"></div>
+            <!-- <label for="bedsPerRoom">Camas por habitación (separadas por comas)</label>
+            <input type="text" name="bedsPerRoom" id="bedsPerRoom" placeholder="Ej: 2,1,1" /> -->
+
+            <label for="bathrooms">Número de baños</label>
+            <input type="number" name="bathrooms" id="bathrooms" min="1" />
+            <fieldset id="photosContainer"></fieldset>
+            <!-- <fieldset>
+                <legend>Photos</legend>
+                <label for="photos[0][url]">URL de la foto principal</label>
+                <input type="text" name="photos[0][url]" id="photos[0][url]" />
+                <label for="photos[0][description]">Descripción de la foto principal</label>
+                <input type="text" name="photos[0][description]" id="photos[0][description]" />
+            </fieldset> -->
+            <button type="button" onclick="addPhotoField()">Añadir fotos</button>
+            <label for="price">Precio por día (€)</label>
+            <input type="number" name="price" id="price" min="0" required />
+
+            <label for="maxGuests">Máximo de huéspedes</label>
+            <input type="number" name="maxGuests" id="maxGuests" min="1" required />
+
+            <label for="squareMeters">Metros cuadrados</label>
+            <input type="number" name="squareMeters" id="squareMeters" min="1" required />
+
+            <fieldset>
+                <legend>Servicios</legend>
+                <label><input type="checkbox" name="services[airConditioning]" /> Aire acondicionado</label>
+                <label><input type="checkbox" name="services[heating]" /> Calefacción</label>
+                <label><input type="checkbox" name="services[accessibility]" /> Accesibilidad</label>
+                <label><input type="checkbox" name="services[television]" /> Televisión</label>
+                <label><input type="checkbox" name="services[kitchen]" /> Cocina</label>
+                <label><input type="checkbox" name="services[internet]" /> Internet</label>
+            </fieldset>
+
+            <fieldset>
+                <label>Provincia:
+                    <input type="text" name="location[province]" />
+                </label>
+
+                <label>Ciudad:
+                    <input type="text" name="location[city]" />
+                </label>
+
+                <label>Latitud (GPS):
+                    <input type="number" step="any" name="location[gpsCoordinates][lat]" />
+                </label>
+
+                <label>Longitud (GPS):
+                    <input type="number" step="any" name="location[gpsCoordinates][lng]" />
+                </label>
+            </fieldset>
+            <button type="submit">Añadir apartamento</button>
+        </form>
+
+        <br />
+        <a href="/">Volver al inicio</a>
+    </div>
+    <script>
+        let photoCount = 0;
+        // let urls = [];
+
+        // ********** Función para añadir imagenes **********
+        function addPhotoField() {
+            const container = document.getElementById('photosContainer');
+            const fieldset = document.createElement('fieldset');
+            fieldset.className = 'photo-fieldset';
+            fieldset.innerHTML = `
+      <legend>Foto #${photoCount + 1}</legend>
+
+      <label for="photos[${photoCount}][url]">URL de la foto:</label>
+      <input type="text" name="photos[${photoCount}][url]" required />
+
+      <label for="photos[${photoCount}][description]">Descripción:</label>
+      <input type="text" name="photos[${photoCount}][description]" />
+
+      <label>
+        <input type="radio" name="mainPhotoIndex" value="${photoCount}" ${photoCount === 0 ? 'checked' : ''} />
+        Foto Principal
+      </label>
+
+      <hr />
+    `;
+            container.appendChild(fieldset);
+            photoCount++;
+        }
+
+
+
+        // ********** Función para añadir camas **********
+        document.addEventListener("DOMContentLoaded", () => {
+            const roomsInput = document.getElementById("rooms");
+            const bedsContainer = document.getElementById("bedsContainer");
+
+            if (!roomsInput || !bedsContainer) {
+                console.error("No se encontraron los elementos del DOM");
+                return;
+            }
+
+            function generateBedInputs() {
+                const roomCount = parseInt(roomsInput.value) || 0;
+                bedsContainer.innerHTML = "";
+
+                if (roomCount <= 0) return;
+
+                const legend = document.createElement("legend");
+                legend.textContent = "Camas por habitación";
+                const fieldset = document.createElement("fieldset");
+                fieldset.appendChild(legend);
+
+                for (let i = 0; i < roomCount; i++) {
+                    const label = document.createElement("label");
+                    label.textContent = `Camas en habitación ${i + 1}:`;
+
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.name = `bedsPerRoom[${i}]`;
+                    input.min = "0";
+                    input.placeholder = "Ej: 2";
+                    input.required = true;
+
+                    fieldset.appendChild(label);
+                    fieldset.appendChild(input);
+                    fieldset.appendChild(document.createElement("br"));
+                }
+
+                bedsContainer.appendChild(fieldset);
+            }
+
+            roomsInput.addEventListener("input", generateBedInputs);
+        });
+
+        // ********** Función para añadir normas **********
+        let ruleCount = 0;
+
+        function addRuleField() {
+            const container = document.getElementById("rulesContainer");
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.name = `rules[${ruleCount + 1}]`; 
+            input.placeholder = "Ej: No fumar, No mascotas";
+            input.className = "field";
+
+            const label = document.createElement("label");
+            label.setAttribute("for", `rules[${ruleCount + 1}]`);
+            label.textContent = `Regla #${ruleCount + 1}:`;
+
+            const br = document.createElement("br");
+
+            container.appendChild(label);
+            container.appendChild(input);
+            container.appendChild(br);
+
+            ruleCount++;
+        }
+    </script>
+</body>
+
+</html>

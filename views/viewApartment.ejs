@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= dataApartments.title %></title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+<body>
+    <main class="container">
+        <h1><%= dataApartments.title %></h1>
+
+        <% if (dataApartments) { %>
+            <article>
+                <header>
+                    <h2><%= dataApartments.title %></h2>
+                </header>
+
+                <p><%= dataApartments.description %></p>
+
+                <% const mainPhoto = dataApartments.photos.find(photo => photo.isMain === true); %>
+                <% if (mainPhoto) { %>
+                    <img src="<%= mainPhoto.url %>" alt="<%= mainPhoto.description %>" style="width: 100%; height: auto;">
+                <% } else { %>
+                    <p>No hay foto principal disponible.</p>
+                <% } %>
+
+                <ul>
+                    <li><strong>Habitaciones:</strong> <%= dataApartments.rooms %></li>
+                    <li><strong>Baños:</strong> <%= dataApartments.bathrooms %></li>
+                    <li><strong>Precio por noche:</strong> <%= dataApartments.price %> €</li>
+                    <li><strong>Máximo de huéspedes:</strong> <%= dataApartments.maxGuests %></li>
+                    <li><strong>Metros cuadrados:</strong> <%= dataApartments.squareMeters %> m²</li>
+                </ul>
+                <p><strong>Servicios:</strong>
+                    <% if (dataApartments.services.airConditioning) { %>Aire Acondicionado | <% } %>
+                    <% if (dataApartments.services.heating) { %>Calefacción | <% } %>
+                    <% if (dataApartments.services.accessibility) { %>Accesibilidad | <% } %>
+                    <% if (dataApartments.services.television) { %>Televisión | <% } %>
+                    <% if (dataApartments.services.kitchen) { %>Cocina | <% } %>
+                    <% if (dataApartments.services.internet) { %>Internet<% } %>
+                </p>
+                <p><strong>Ubicación:</strong> <%= dataApartments.location.city %>, <%= dataApartments.location.province %></p>
+            </article>
+        <% } else { %>
+            <p>No hay apartamentos disponibles.</p>
+        <% } %>
+    </main>
+    <a href="/">Volver a Home</a>
+</body>
+</html>
