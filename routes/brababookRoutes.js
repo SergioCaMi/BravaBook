@@ -179,10 +179,6 @@ router.get("/apartments", async (req, res) => {
 router.get("/apartments/search", async (req, res) => {
   console.log(req.query);
   const {
-    // title,
-    // description,
-    rooms,
-    bathrooms,
     minPrice,
     maxPrice,
     maxGuests,
@@ -203,27 +199,8 @@ router.get("/apartments/search", async (req, res) => {
 
   const query = {};
   query.active = true;
-  if (rooms) {
-    const parsedRooms = Number(rooms);
-    if (!isNaN(parsedRooms)) {
-      query.rooms = parsedRooms;
-    }
-  }
-  if (bedsPerRoom) {
-    const bedsArray = Array.isArray(bedsPerRoom)
-      ? bedsPerRoom.map(Number).filter((n) => !isNaN(n))
-      : [];
 
-    if (bedsArray.length > 0) {
-      query.bedsPerRoom = { $all: bedsArray };
-    }
-  }
-  if (bathrooms) {
-    const parsedBathrooms = Number(bathrooms);
-    if (!isNaN(parsedBathrooms)) {
-      query.bathrooms = parsedBathrooms;
-    }
-  }
+  // *** Ciudad ***
   if (city) {
     query["location.city"] = {
       $exists: true,
@@ -232,7 +209,7 @@ router.get("/apartments/search", async (req, res) => {
       $options: "i",
     };
   }
-
+  // *** Provincia ***
   if (province) {
     query["location.province"] = {
       $exists: true,
@@ -256,13 +233,13 @@ router.get("/apartments/search", async (req, res) => {
     }
   }
   // *** Huéspedes ***
-if (maxGuests){
+  if (maxGuests) {
     const numGuests = Number(maxGuests);
     if (!isNaN(numGuests)) {
       query.maxGuests = { $lte: numGuests };
     }
-}
-
+  }
+  // *** Metros cuadrados ***
   if (squareMeters) {
     const parsedSquareMeters = Number(squareMeters);
     if (!isNaN(parsedSquareMeters)) {
