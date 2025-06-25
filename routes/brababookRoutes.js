@@ -179,11 +179,12 @@ router.get("/apartments", async (req, res) => {
 router.get("/apartments/search", async (req, res) => {
   console.log(req.query);
   const {
-    title,
-    description,
+    // title,
+    // description,
     rooms,
     bathrooms,
-    price,
+    minPrice,
+    maxPrice,
     maxGuests,
     squareMeters,
     "rules[]": rules,
@@ -202,18 +203,6 @@ router.get("/apartments/search", async (req, res) => {
 
   const query = {};
   query.active = true;
-  if (title) {
-    query.title = { $regex: title.trim(), $options: "i" };
-  }
-  if (description) {
-    query.description = { $regex: description.trim(), $options: "i" };
-  }
-  if (rules) {
-    const rulesArray = Array.isArray(rules) ? rules : [rules];
-    if (rulesArray.length > 0) {
-      query.rules = { $all: rulesArray.map((r) => r.trim()) };
-    }
-  }
   if (rooms) {
     const parsedRooms = Number(rooms);
     if (!isNaN(parsedRooms)) {
@@ -252,18 +241,28 @@ router.get("/apartments/search", async (req, res) => {
       $options: "i",
     };
   }
-  if (price) {
-    const parsedPrice = Number(price);
-    if (!isNaN(parsedPrice)) {
-      query.price = { $lte: parsedPrice };
+  // *** Precio ***
+  // Desestructuramos para no sobreescribir otra consulta anterior (min o max) sobre el mismo campo
+  if (minPrice) {
+    const numMinPrice = Number(minPrice);
+    if (!isNaN(numMinPrice)) {
+      query.price = { ...query.price, $gte: numMinPrice };
     }
   }
-  if (maxGuests) {
-    const parsedMaxGuests = Number(maxGuests);
-    if (!isNaN(parsedMaxGuests)) {
-      query.maxGuests = { $gte: parsedMaxGuests };
+  if (maxPrice) {
+    const numMaxPrice = Number(maxPrice);
+    if (!isNaN(numMaxPrice)) {
+      query.price = { ...query.price, $lte: numMaxPrice };
     }
   }
+  // *** Huéspedes ***
+if (maxGuests){
+    const numGuests = Number(maxGuests);
+    if (!isNaN(numGuests)) {
+      query.maxGuests = { $lte: numGuests };
+    }
+}
+
   if (squareMeters) {
     const parsedSquareMeters = Number(squareMeters);
     if (!isNaN(parsedSquareMeters)) {
@@ -319,7 +318,6 @@ router.get("/apartments/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // ********** RECURSOS **********
 
