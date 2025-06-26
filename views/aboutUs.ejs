@@ -1,0 +1,10 @@
+<%- include("templates/header", { title: title }) %>
+    <div class="position-relative my-5" style="width: 100%;">
+        <a href="admin/apartment/new">Añadir un nuevo apartamewnto</a>
+        <br><a href="/apartments">Ver todos los apartamentos</a>
+        <br><a href="/apartments/6859020e329095a063bb1a76">Ver apartamentos por id (6859020e329095a063bb1a76)</a>
+        <br><a href="/apartments/search?title=Apartamento&rooms=3&price=150&maxGuests=6">Ver apartamentos por filtros
+            (title = 'Apartamento', rooms = 3, price<=150, maxGuests=6)</a>
+    </div>
+
+    <%- include("templates/footer") %>

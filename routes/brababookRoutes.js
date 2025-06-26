@@ -7,8 +7,9 @@ function getRenderObject(
   title,
   dataApartments = null,
   req = null,
-  message = undefined,
-  user = null
+  user = null,
+  message,
+  currentPage
 ) {
   const userData =
     user ||
@@ -24,6 +25,7 @@ function getRenderObject(
     dataApartments,
     message,
     user: userData,
+    currentPage,
   };
 }
 
@@ -35,11 +37,12 @@ router.get("/", async (req, res) => {
   try {
     const dataApartments = await Apartment.find({ active: true }).limit(12);
     const renderData = getRenderObject(
-      "Home",
+      "Inicio",
       dataApartments,
       req,
+      null,
       undefined,
-      "black"
+      "home"
     );
     console.log("desde GET / hasta home.ejs");
     res.status(200).render("home.ejs", renderData);
@@ -52,6 +55,54 @@ router.get("/", async (req, res) => {
   }
 });
 
+// ******************** Endpoint de Admnin ********************
+// *** Mostramos la pagina de administradores ***
+// TODO: gestionar quién puede entrar
+router.get("/about", (req, res) => {
+  const dataApartments = [];
+  const renderData = getRenderObject(
+    "Acerca de...",
+    dataApartments,
+    req,
+    null,
+    undefined,
+    "about"
+  );
+  res.status(200).render("aboutUs.ejs", renderData);
+});
+
+// ******************** Endpoint de Contact ********************
+// *** Mostramos la pagina de administradores ***
+// TODO: gestionar quién puede entrar
+router.get("/contact", (req, res) => {
+  const dataApartments = [];
+  const renderData = getRenderObject(
+    "Contacta con nosotros",
+    dataApartments,
+    req,
+    null, 
+    undefined,
+    "contact"
+  );
+  res.status(200).render("contactUs.ejs", renderData);
+});
+
+// ******************** Endpoint de Admnin ********************
+// *** Mostramos la pagina de administradores ***
+// TODO: gestionar quién puede entrar
+router.get("/admin", (req, res) => {
+  const dataApartments = [];
+  const renderData = getRenderObject(
+    "Administrador",
+    dataApartments,
+    req,
+    null,
+    undefined,
+    "admin"
+  );
+  res.status(200).render("adminApartment.ejs", renderData);
+});
+
 // ******************** Añadir nuevo apartamento ********************
 // ******************** Formulario para añadir nuevo apartamento ********************
 // *** Mostramos El formulario para añadir un nuevo apartamento ***
@@ -61,7 +112,9 @@ router.get("/admin/apartment/new", async (req, res) => {
     "Admin - Añadir nuevo apartamento",
     dataApartments,
     req,
-    undefined
+    null,
+    undefined,
+    "admin"
   );
   console.log("addApartment.ejs");
   console.log("desde GET /admin/apartment/new hasta addApartment.ejs");
@@ -267,7 +320,7 @@ router.get("/apartments/search", async (req, res) => {
 
     res.json(apartments);
   } catch (error) {
-    console.error("🚨 Error al buscar apartamentos:", error);
+    console.error("Error al buscar apartamentos:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 });
@@ -287,8 +340,9 @@ router.get("/apartments/:id", async (req, res) => {
       dataApartments.title,
       dataApartments,
       req,
+      null,
       undefined,
-      "black"
+      "home"
     );
     res.status(200).render("viewApartment.ejs", renderData);
   } catch (err) {

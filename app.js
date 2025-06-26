@@ -33,6 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // ********** Motor de vistas EJS **********
 app.set("view engine", "ejs");
+
+// ********** Motor de vistas EJS **********
 app.use(express.static("public"));
 
 // ******************** Rutas de login y logout con Google ********************
