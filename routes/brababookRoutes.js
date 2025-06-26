@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
   try {
     const dataApartments = await Apartment.find({ active: true }).limit(12);
     const renderData = getRenderObject(
-      "BravaBook - Inicio",
+      "Home",
       dataApartments,
       req,
       undefined,
@@ -58,7 +58,7 @@ router.get("/", async (req, res) => {
 router.get("/admin/apartment/new", async (req, res) => {
   const dataApartments = [];
   const renderData = getRenderObject(
-    "BravaBook - New Apartment",
+    "Admin - Añadir nuevo apartamento",
     dataApartments,
     req,
     undefined

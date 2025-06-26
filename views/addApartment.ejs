@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("templates/header", { title: title }) %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <title>
-        <%= title %>
-    </title>
-</head>
-
-<body>
     <!-- <ul>
         <li>
             <% if (!user || !user.photo) { %>
@@ -30,182 +19,142 @@
                 <% } %>
         </li>
     </ul> -->
-    <h1>Bienvenidos a <%= title %>
     </h1>
     <div class="container">
-        <h2>Añadir uevo apartamento</h2>
-        <form action="/admin/apartment" method="post">
+<form action="/admin/apartment" method="post">
 
-            <label for="title">Título del apartamento</label>
-            <input type="text" name="title" id="title" required />
+  <!-- Título y Descripción -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label for="title" class="form-label">Título del apartamento</label>
+      <input type="text" name="title" id="title" class="form-control" required />
+    </div>
+    <div class="col-md-6">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
+    </div>
+  </div>
 
-            <label for="description">Descripción</label>
-            <textarea name="description" id="description" required></textarea>
+  <!-- Reglas dinámicas -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-12">
+      <label class="form-label">Reglas</label>
+      <div id="rulesContainer"></div>
+      <button type="button" onclick="addRuleField()" class="btn btn-outline-secondary btn-sm mt-2">+ Añadir norma</button>
+    </div>
+  </div>
 
+  <!-- Habitaciones y Camas -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label for="rooms" class="form-label">Número de habitaciones</label>
+      <input type="number" name="rooms" id="rooms" min="1" class="form-control" required />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Camas por habitación</label>
+      <div id="bedsContainer"></div>
+    </div>
+  </div>
 
-            <div id="rulesContainer"></div>
-            <!-- <label for="rules">Reglas (separadas por comas)</label>
-            <input type="text" name="rules" id="rules" placeholder="Ej: No fumar, No mascotas" /> -->
-            <button type="button" onclick="addRuleField()">+ Añadir norma</button>
+  <!-- Baños y Fotos -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label for="bathrooms" class="form-label">Número de baños</label>
+      <input type="number" name="bathrooms" id="bathrooms" min="1" class="form-control" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Fotos</label>
+      <div id="photosContainer"></div>
+      <button type="button" onclick="addPhotoField()" class="btn btn-outline-secondary btn-sm mt-2">+ Añadir foto</button>
+    </div>
+  </div>
 
-            <label for="rooms">Número de habitaciones</label>
-            <input type="number" name="rooms" id="rooms" min="1" required />
-            <div id="bedsContainer"></div>
-            <!-- <label for="bedsPerRoom">Camas por habitación (separadas por comas)</label>
-            <input type="text" name="bedsPerRoom" id="bedsPerRoom" placeholder="Ej: 2,1,1" /> -->
+  <!-- Precio, Huéspedes y Metros cuadrados -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label for="price" class="form-label">Precio por día (€)</label>
+      <input type="number" name="price" id="price" min="0" class="form-control" required />
+    </div>
+    <div class="col-md-4">
+      <label for="maxGuests" class="form-label">Máximo de huéspedes</label>
+      <input type="number" name="maxGuests" id="maxGuests" min="1" class="form-control" required />
+    </div>
+    <div class="col-md-4">
+      <label for="squareMeters" class="form-label">Metros cuadrados</label>
+      <input type="number" name="squareMeters" id="squareMeters" min="1" class="form-control" required />
+    </div>
+  </div>
 
-            <label for="bathrooms">Número de baños</label>
-            <input type="number" name="bathrooms" id="bathrooms" min="1" />
-            <fieldset id="photosContainer"></fieldset>
-            <!-- <fieldset>
-                <legend>Photos</legend>
-                <label for="photos[0][url]">URL de la foto principal</label>
-                <input type="text" name="photos[0][url]" id="photos[0][url]" />
-                <label for="photos[0][description]">Descripción de la foto principal</label>
-                <input type="text" name="photos[0][description]" id="photos[0][description]" />
-            </fieldset> -->
-            <button type="button" onclick="addPhotoField()">Añadir fotos</button>
-            <label for="price">Precio por día (€)</label>
-            <input type="number" name="price" id="price" min="0" required />
+  <!-- Servicios -->
+  <div class="mb-4">
+    <legend class="form-label">Servicios</legend>
+    <div class="row g-2">
+      <div class="col-md-4">
+        <div class="form-check">
+          <input type="checkbox" name="services[airConditioning]" class="form-check-input" id="airConditioning">
+          <label class="form-check-label" for="airConditioning">Aire acondicionado</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input type="checkbox" name="services[heating]" class="form-check-input" id="heating">
+          <label class="form-check-label" for="heating">Calefacción</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input type="checkbox" name="services[accessibility]" class="form-check-input" id="accessibility">
+          <label class="form-check-label" for="accessibility">Accesibilidad</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input type="checkbox" name="services[television]" class="form-check-input" id="television">
+          <label class="form-check-label" for="television">Televisión</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input type="checkbox" name="services[kitchen]" class="form-check-input" id="kitchen">
+          <label class="form-check-label" for="kitchen">Cocina</label>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input type="checkbox" name="services[internet]" class="form-check-input" id="internet">
+          <label class="form-check-label" for="internet">Internet</label>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            <label for="maxGuests">Máximo de huéspedes</label>
-            <input type="number" name="maxGuests" id="maxGuests" min="1" required />
+  <!-- Ubicación -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label for="location[province]" class="form-label">Provincia:</label>
+      <input type="text" name="location[province]" class="form-control" />
+    </div>
+    <div class="col-md-4">
+      <label for="location[city]" class="form-label">Ciudad:</label>
+      <input type="text" name="location[city]" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label for="location[gpsCoordinates][lat]" class="form-label">Latitud (GPS):</label>
+      <input type="number" step="any" name="location[gpsCoordinates][lat]" class="form-control" />
+    </div>
+    <div class="col-md-2">
+      <label for="location[gpsCoordinates][lng]" class="form-label">Longitud (GPS):</label>
+      <input type="number" step="any" name="location[gpsCoordinates][lng]" class="form-control" />
+    </div>
+  </div>
 
-            <label for="squareMeters">Metros cuadrados</label>
-            <input type="number" name="squareMeters" id="squareMeters" min="1" required />
+  <!-- Botón de envío -->
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary">Añadir apartamento</button>
+  </div>
 
-            <fieldset>
-                <legend>Servicios</legend>
-                <label><input type="checkbox" name="services[airConditioning]" /> Aire acondicionado</label>
-                <label><input type="checkbox" name="services[heating]" /> Calefacción</label>
-                <label><input type="checkbox" name="services[accessibility]" /> Accesibilidad</label>
-                <label><input type="checkbox" name="services[television]" /> Televisión</label>
-                <label><input type="checkbox" name="services[kitchen]" /> Cocina</label>
-                <label><input type="checkbox" name="services[internet]" /> Internet</label>
-            </fieldset>
-
-            <fieldset>
-                <label>Provincia:
-                    <input type="text" name="location[province]" />
-                </label>
-
-                <label>Ciudad:
-                    <input type="text" name="location[city]" />
-                </label>
-
-                <label>Latitud (GPS):
-                    <input type="number" step="any" name="location[gpsCoordinates][lat]" />
-                </label>
-
-                <label>Longitud (GPS):
-                    <input type="number" step="any" name="location[gpsCoordinates][lng]" />
-                </label>
-            </fieldset>
-            <button type="submit">Añadir apartamento</button>
-        </form>
-
+</form>
         <br />
         <a href="/">Volver al inicio</a>
     </div>
-    <script>
-        let photoCount = 0;
-        // let urls = [];
-
-        // ********** Función para añadir imagenes **********
-        function addPhotoField() {
-            const container = document.getElementById('photosContainer');
-            const fieldset = document.createElement('fieldset');
-            fieldset.className = 'photo-fieldset';
-            fieldset.innerHTML = `
-      <legend>Foto #${photoCount + 1}</legend>
-
-      <label for="photos[${photoCount}][url]">URL de la foto:</label>
-      <input type="text" name="photos[${photoCount}][url]" required />
-
-      <label for="photos[${photoCount}][description]">Descripción:</label>
-      <input type="text" name="photos[${photoCount}][description]" />
-
-      <label>
-        <input type="radio" name="mainPhotoIndex" value="${photoCount}" ${photoCount === 0 ? 'checked' : ''} />
-        Foto Principal
-      </label>
-
-      <hr />
-    `;
-            container.appendChild(fieldset);
-            photoCount++;
-        }
-
-
-
-        // ********** Función para añadir camas **********
-        document.addEventListener("DOMContentLoaded", () => {
-            const roomsInput = document.getElementById("rooms");
-            const bedsContainer = document.getElementById("bedsContainer");
-
-            if (!roomsInput || !bedsContainer) {
-                console.error("No se encontraron los elementos del DOM");
-                return;
-            }
-
-            function generateBedInputs() {
-                const roomCount = parseInt(roomsInput.value) || 0;
-                bedsContainer.innerHTML = "";
-
-                if (roomCount <= 0) return;
-
-                const legend = document.createElement("legend");
-                legend.textContent = "Camas por habitación";
-                const fieldset = document.createElement("fieldset");
-                fieldset.appendChild(legend);
-
-                for (let i = 0; i < roomCount; i++) {
-                    const label = document.createElement("label");
-                    label.textContent = `Camas en habitación ${i + 1}:`;
-
-                    const input = document.createElement("input");
-                    input.type = "number";
-                    input.name = `bedsPerRoom[${i}]`;
-                    input.min = "0";
-                    input.placeholder = "Ej: 2";
-                    input.required = true;
-
-                    fieldset.appendChild(label);
-                    fieldset.appendChild(input);
-                    fieldset.appendChild(document.createElement("br"));
-                }
-
-                bedsContainer.appendChild(fieldset);
-            }
-
-            roomsInput.addEventListener("input", generateBedInputs);
-        });
-
-        // ********** Función para añadir normas **********
-        let ruleCount = 0;
-
-        function addRuleField() {
-            const container = document.getElementById("rulesContainer");
-
-            const input = document.createElement("input");
-            input.type = "text";
-            input.name = `rules[${ruleCount + 1}]`; 
-            input.placeholder = "Ej: No fumar, No mascotas";
-            input.className = "field";
-
-            const label = document.createElement("label");
-            label.setAttribute("for", `rules[${ruleCount + 1}]`);
-            label.textContent = `Regla #${ruleCount + 1}:`;
-
-            const br = document.createElement("br");
-
-            container.appendChild(label);
-            container.appendChild(input);
-            container.appendChild(br);
-
-            ruleCount++;
-        }
-    </script>
-</body>
-
-</html>
+<%- include("templates/footer") %>

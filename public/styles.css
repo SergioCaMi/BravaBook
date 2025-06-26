@@ -1,0 +1,23 @@
+ * {
+      box-sizing: border-box;
+    }
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("fondo.jpg"); 
+    background-size: cover;             
+    background-position: center;        
+    background-repeat: no-repeat;      
+    background-attachment: fixed;       
+}
+
+.navbar-brand img {
+  background-color: transparent !important;
+  filter: drop-shadow(0 0 0 transparent);
+  image-rendering: auto;
+}
+
+.bg-white {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}

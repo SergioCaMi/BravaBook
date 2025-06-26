@@ -1,140 +1,143 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <title>
-        <%= title %>
-    </title>
-</head>
-
-<body>
-    <!-- <ul>
-        <li>
-            <% if (!user || !user.photo) { %>
-                <button onclick="window.location.href='/auth/google'" title="Iniciar sesión">🔑</button>
-                <% } %>
-        </li>
-        <li>
-            <% if (user) { %>
-                <button onclick="window.location.href='/logout'" title="Cerrar sesión">
-                    <% if (user.photo && user.photo.trim() !=="" ) { %>
-                        <img src="<%= user.photo %>" alt="Logout"
-                            style="width: 28px; height: 28px; border-radius: 50%;">
-                        <% } else { %>
-                            <i class="fas fa-user" style="font-size: 1.2rem;"></i>
-                            <% } %>
-                </button>
-                <% } %>
-        </li>
-    </ul> -->
-    <!-- ********** Apartamentos recomendados ********** -->
-    <div class="container">
-        <h1>Bienvenidos a <%= title %>
-        </h1>
-        <a href="admin/apartment/new">Añadir un nuevo apartamewnto</a>
-        <br><a href="/apartments">Ver todos los apartamentos</a>
-        <br><a href="/apartments/6859020e329095a063bb1a76">Ver apartamentos por id (6859020e329095a063bb1a76)</a>
-        <br><a href="/apartments/search?title=Apartamento&rooms=3&price=150&maxGuests=6">Ver apartamentos por filtros
-            (title = 'Apartamento', rooms = 3, price<=150, maxGuests=6)</a>
+<%- include("templates/header", { title: title }) %>
+<!-- <main class="container"> -->
+  <!-- ********** Carrusel automático ********** -->
+<div class="position-relative my-5" style="width: 100%;">
+ <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="img1.jpg" class="d-block w-100 h-auto" style="aspect-ratio: 16 / 6;" alt="Apartamento 1">
+      </div>
+      <div class="carousel-item">
+        <img src="img2.jpg" class="d-block w-100 h-auto" style="aspect-ratio: 16 / 6;" alt="Apartamento 2">
+      </div>
+      <div class="carousel-item">
+        <img src="img3.jpg" class="d-block w-100 h-auto" style="aspect-ratio: 16 / 6;" alt="Apartamento 3">
+      </div>
     </div>
+  </div>
 
- <main class="container">
-                            <!-- ********** Formulario de búsqueda ********** -->
-                        <div class="container">
-                            <h2>Filtros</h2>
-                            <form action="/apartments/search" method="GET">
-                                <label for="maxGuests">Capacidad máxima de huéspedes:</label>
-                                <input type="number" name="maxGuests" id="maxGuests" min="1">
+  <!-- Formulario superpuesto encima del carrusel -->
+  <div class="position-absolute top-50 start-50 translate-middle w-100 px-3" style="max-width: 800px; z-index: 10;">
+    <div class="bg-white p-4 rounded shadow-sm">
+      <h4 class="mb-4 text-center">Filtrar apartamentos</h4>
 
-                                <label for="price">Precio mínimo por noche (€):</label>
-                                <input type="number" name="minPrice" id="price" min="0" step="0.01">
+      <form action="/apartments/search" method="GET">
 
-                                <label for="price">Precio máximo por noche (€):</label>
-                                <input type="number" name="maxPrice" id="price" min="0" step="0.01">
+        <!-- Fila 1 -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label for="locationProvince" class="form-label">Provincia:</label>
+            <input type="text" name="location.province" id="locationProvince" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label for="locationCity" class="form-label">Ciudad:</label>
+            <input type="text" name="location.city" id="locationCity" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label for="maxGuests" class="form-label">Capacidad máxima:</label>
+            <input type="number" name="maxGuests" id="maxGuests" class="form-control" min="1">
+          </div>
+        </div>
 
-                                <label for="location.province">Provincia:</label>
-                                <input type="text" name="location.province" id="locationProvince">
+        <!-- Fila 2 -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label for="minPrice" class="form-label">Precio mínimo (€):</label>
+            <input type="number" name="minPrice" id="minPrice" class="form-control" min="0" step="0.01">
+          </div>
+          <div class="col-md-6">
+            <label for="maxPrice" class="form-label">Precio máximo (€):</label>
+            <input type="number" name="maxPrice" id="maxPrice" class="form-control" min="0" step="0.01">
+          </div>
+        </div>
 
-                                <label for="location.city">Ciudad:</label>
-                                <input type="text" name="location.city" id="locationCity">
+        <!-- Fila 3 -->
+        <div class="mb-4">
+          <label class="form-label">Servicios:</label>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="checkbox" name="services.airConditioning" value="on" class="form-check-input" id="airConditioning">
+                <label class="form-check-label" for="airConditioning">Aire Acondicionado</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="checkbox" name="services.heating" value="on" class="form-check-input" id="heating">
+                <label class="form-check-label" for="heating">Calefacción</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="checkbox" name="services.accessibility" value="on" class="form-check-input" id="accessibility">
+                <label class="form-check-label" for="accessibility">Accesibilidad</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="checkbox" name="services.television" value="on" class="form-check-input" id="television">
+                <label class="form-check-label" for="television">Televisión</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="checkbox" name="services.kitchen" value="on" class="form-check-input" id="kitchen">
+                <label class="form-check-label" for="kitchen">Cocina</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-check">
+                <input type="checkbox" name="services.internet" value="on" class="form-check-input" id="internet">
+                <label class="form-check-label" for="internet">Internet</label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                                <label>
-                                    <input type="checkbox" name="services.airConditioning" value="on">
-                                    Aire Acondicionado
-                                </label>
+        <!-- Botón de envío -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Buscar apartamentos</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>  <hr>
 
-                                <label>
-                                    <input type="checkbox" name="services.heating" value="on">
-                                    Calefacción
-                                </label>
+  <!-- ********** Resultados de búsqueda ********** -->
+  <% if (dataApartments && dataApartments.length > 0) { %>
+    <% dataApartments.forEach(function(apartment) { %>
+      <article class="apartment">
+        <header>
+          <h2 style="text-align: center;">
+            <a href="/apartments/<%= apartment._id %>">
+              <%= apartment.title %>
+            </a>
+          </h2>
+        </header>
 
-                                <label>
-                                    <input type="checkbox" name="services.accessibility" value="on">
-                                    Accesibilidad
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="services.television" value="on">
-                                    Televisión
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="services.kitchen" value="on">
-                                    Cocina
-                                </label>
-
-                                <label>
-                                    <input type="checkbox" name="services.internet" value="on">
-                                    Internet
-                                </label>
-
-                                <label for="startDate">Fecha de entrada:</label>
-                                <input type="date" name="startDate" id="startDate">
-
-                                <label for="endDate">Fecha de salida:</label>
-                                <input type="date" name="endDate" id="endDate">
-
-                                <button type="submit">Buscar apartamentos</button>
-                            </form>
-                            <hr>
-
-        <% if (dataApartments && dataApartments.length > 0) { %>
-            <% dataApartments.forEach(function(apartment) { %>
-                <article class="apartment">
-                    <header>
-                        <h2 style="text-align: center;">
-                            <a href="/apartments/<%= apartment._id %>">
-                                <%= apartment.title %>
-                            </a>
-                        </h2>
-                    </header>
-                    <% const mainPhoto = apartment.photos.find(photo => photo.isMain === true); %>
-                    <% if (mainPhoto) { %>
-                        <img src="<%= mainPhoto.url %>" alt="Foto principal" style="width: 100%; height: auto;">
-                    <% } else { %>
-                        <p>No hay foto principal disponible.</p>
-                    <% } %>
-                    <p><strong>Precio:</strong> <%= apartment.price %> €/noche</p>
-                    <p><strong>M²:</strong> <%= apartment.squareMeters %> m²</p>
-                    <p><strong>Servicios:</strong>
-                        <% if (apartment.services.airConditioning) { %> Aire Acondicionado | <% } %>
-                        <% if (apartment.services.heating) { %> Calefacción | <% } %>
-                        <% if (apartment.services.accessibility) { %> Accesibilidad | <% } %>
-                        <% if (apartment.services.television) { %> Televisión | <% } %>
-                        <% if (apartment.services.kitchen) { %> Cocina | <% } %>
-                        <% if (apartment.services.internet) { %> Internet <% } %>
-                    </p>
-                </article>
-                <hr>
-            <% }); %>
+        <% const mainPhoto = apartment.photos.find(photo => photo.isMain); %>
+        <% if (mainPhoto) { %>
+          <img src="<%= mainPhoto.url %>" alt="Foto principal" style="width: 100%; height: auto;">
         <% } else { %>
-            <p>No hay apartamentos disponibles.</p>
+          <p>No hay foto principal disponible.</p>
         <% } %>
-    </main>
 
-</body>
+        <p><strong>Precio:</strong> <%= apartment.price %> €/noche</p>
+        <p><strong>M²:</strong> <%= apartment.squareMeters %> m²</p>
+        <p><strong>Servicios:</strong>
+          <% if (apartment.services.airConditioning) { %> Aire Acondicionado | <% } %>
+          <% if (apartment.services.heating) { %> Calefacción | <% } %>
+          <% if (apartment.services.accessibility) { %> Accesibilidad | <% } %>
+          <% if (apartment.services.television) { %> Televisión | <% } %>
+          <% if (apartment.services.kitchen) { %> Cocina | <% } %>
+          <% if (apartment.services.internet) { %> Internet <% } %>
+        </p>
+      </article>
+      <hr>
+    <% }); %>
+  <% } else { %>
+    <p>No hay apartamentos disponibles.</p>
+  <% } %>
 
-</html>
+
+<%- include("templates/footer") %>
