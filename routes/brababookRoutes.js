@@ -179,7 +179,6 @@ router.post("/admin/apartment", async (req, res) => {
       },
     };
 
-    // TODO: valores alternativos a null en todas las variables simples
     //  *** Camas por habitación ***
     let bedsPerRoom = [];
     if (Array.isArray(req.body.bedsPerRoom)) {
@@ -207,11 +206,17 @@ router.post("/admin/apartment", async (req, res) => {
 
     await newApartment.save();
     console.log("desde POST /admin/apartment hasta home.ejs");
-    res.redirect("/");
+    const renderData = getRenderObject(
+      dataApartments.title,
+      dataApartments,
+      req,
+      null,
+      undefined,
+      "home"
+    );
+    res.status(200).render("viewApartment.ejs", renderData);
   } catch (error) {
     console.error("Error:", error);
-
-    // Otros errores internos
   }
 });
 
@@ -317,8 +322,17 @@ router.get("/apartments/search", async (req, res) => {
 
     const apartments = await Apartment.find(query);
     console.log("Resultados:", apartments.length);
+    const renderData = getRenderObject(
+      apartments.title,
+      apartments,
+      req,
+      null,
+      undefined,
+      "home"
+    );
+    res.status(200).render("searchApartmens.ejs", renderData);
 
-    res.json(apartments);
+    // res.json(apartments);
   } catch (error) {
     console.error("Error al buscar apartamentos:", error);
     res.status(500).json({ message: "Error interno del servidor" });

@@ -21,8 +21,6 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 py-3">
   <div class="container-fluid">
-
-    <!-- Logo  -->
     <a class="navbar-brand" href="/">
       <img src="/logo.png" width="160" height="60" alt="Logo BravaBook">
     </a>
@@ -34,33 +32,22 @@
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav align-items-center">
-
-        <!-- Inicio -->
         <li class="nav-item">
           <a class="nav-link <%= currentPage === 'home' ? 'active' : '' %>" aria-current="page" href="/">Inicio</a>
         </li>
-
-        <!-- Acerca -->
         <li class="nav-item">
           <a class="nav-link <%= currentPage === 'about' ? 'active' : '' %>" href="/about">Acerca</a>
         </li>
-
-        <!-- Contacto -->
         <li class="nav-item">
           <a class="nav-link <%= currentPage === 'contact' ? 'active' : '' %>" href="/contact">Contacto</a>
         </li>
-
-        <!-- Administrador -->
         <li class="nav-item">
           <a class="nav-link <%= currentPage === 'admin' ? 'active' : '' %>" href="/admin">Administrador</a>
         </li>
-
-        <!-- Botones SignIn / LogIn -->
         <li class="nav-item d-flex gap-2">
           <a class="btn btn-outline-light btn-sm" href="#">SignIn</a>
           <a class="btn btn-outline-light btn-sm" href="#">LogIn</a>
         </li>
-
       </ul>
     </div>
   </div>
