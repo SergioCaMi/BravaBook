@@ -55,8 +55,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ******************** Endpoint de Admnin ********************
-// *** Mostramos la pagina de administradores ***
+// ******************** Endpoint de Acerca de... ********************
+// *** Mostramos la pagina de Acerca de... ***
 // TODO: gestionar quién puede entrar
 router.get("/about", (req, res) => {
   const dataApartments = [];
@@ -72,7 +72,7 @@ router.get("/about", (req, res) => {
 });
 
 // ******************** Endpoint de Contact ********************
-// *** Mostramos la pagina de administradores ***
+// *** Mostramos la pagina de Contacto ***
 // TODO: gestionar quién puede entrar
 router.get("/contact", (req, res) => {
   const dataApartments = [];
@@ -109,7 +109,7 @@ router.get("/admin", (req, res) => {
 router.get("/admin/apartment/new", async (req, res) => {
   const dataApartments = [];
   const renderData = getRenderObject(
-    "Admin - Añadir nuevo apartamento",
+    "Añadir nuevo apartamento",
     dataApartments,
     req,
     null,

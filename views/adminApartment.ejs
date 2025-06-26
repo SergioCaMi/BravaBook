@@ -1,6 +1,32 @@
 <%- include("templates/header", { title: title }) %>
+<div class="d-flex justify-content-center my-5">
+  <div class="row g-4 justify-content-center w-100" style="max-width: 900px; margin: auto;">
+    
+    <div class="col-md-6 col-lg-5">
+      <div class="card h-100 shadow-sm">
+        <img src="/createNew.jpg" class="card-img-top" alt="Crear nuevo apartamento" style="height: 200px; object-fit: cover;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Crear nuevo apartamento</h5>
+          <p class="card-text">Añade un nuevo apartamento al sistema.</p>
+          <a href="/admin/apartment/new" class="btn btn-primary mt-auto">Crear nuevo apartamento</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-5">
+      <div class="card h-100 shadow-sm">
+        <img src="/edit.jpg" class="card-img-top" alt="Editar apartamento" style="height: 200px; object-fit: cover;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Editar un apartamento</h5>
+          <p class="card-text">Modifica los datos de un apartamento existente.</p>
+          <a href="/admin/apartment/edit" class="btn btn-primary mt-auto">Editar apartamento</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
     <div class="position-relative my-5" style="width: 100%;">
-        <a href="admin/apartment/new">Añadir un nuevo apartamewnto</a>
         <br><a href="/apartments">Ver todos los apartamentos</a>
         <br><a href="/apartments/6859020e329095a063bb1a76">Ver apartamentos por id (6859020e329095a063bb1a76)</a>
         <br><a href="/apartments/search?title=Apartamento&rooms=3&price=150&maxGuests=6">Ver apartamentos por filtros

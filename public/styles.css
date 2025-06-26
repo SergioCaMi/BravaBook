@@ -27,3 +27,9 @@ body {
   font-size: 1rem;
   vertical-align: middle;
 }
+
+.photo-fieldset input[type="text"] {
+  width: 100%;
+  box-sizing: border-box; /* Incluye padding en el cálculo del ancho */
+  margin-bottom: 10px;
+}
