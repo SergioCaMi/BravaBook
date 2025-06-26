@@ -161,19 +161,20 @@
 
                                                 <p class="card-text text-muted small">
                                                     <strong>Servicios:</strong><br>
-                                                    <% if (apartment.services.airConditioning) { %> Aire Acondicionado |
+                                                    <% if (apartment.services.airConditioning) { %> <i class="bi bi-snow text-black me-1"> </i>|
                                                         <% } %>
-                                                            <% if (apartment.services.heating) { %> Calefacción | <% }
+                                                            <% if (apartment.services.heating) { %> <i class="bi bi-fire text-black me-1"></i> | <% }
                                                                     %>
                                                                     <% if (apartment.services.accessibility) { %>
-                                                                        Accesibilidad | <% } %>
+                                                                         <i class="bi bi-person-wheelchair text-black me-1"></i>
+ | <% } %>
                                                                             <% if (apartment.services.television) { %>
-                                                                                Televisión | <% } %>
+                                                                                 <i class="bi bi-tv text-black me-1"></i> | <% } %>
                                                                                     <% if (apartment.services.kitchen) {
-                                                                                        %> Cocina | <% } %>
+                                                                                        %> <i class="bi bi-cup-hot text-black me-1"></i> | <% } %>
                                                                                             <% if
                                                                                                 (apartment.services.internet)
-                                                                                                { %> Internet <% } %>
+                                                                                                { %> <i class="bi bi-wifi text-black me-1"></i> <% } %>
                                                 </p>
                                                 <div class="mt-auto d-flex gap-2">
                                                     <a href="/apartments/<%= apartment._id %>"
