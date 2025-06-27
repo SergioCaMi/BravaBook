@@ -1,7 +1,7 @@
 {
   "name": "bravabook",
   "version": "1.0.0",
-   "type": "module",
+  "type": "module",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "express-session": "^1.18.1",
     "mongoose": "^8.16.0",
     "morgan": "^1.10.0",
     "passport": "^0.7.0",
