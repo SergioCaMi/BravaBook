@@ -1,69 +1,62 @@
-    <% if (dataApartments && dataApartments.length> 0) { %>
-        <div class="d-flex justify-content-center my-5">
-            <div class="row g-4 justify-content-center w-100" style="max-width: 900px; margin: auto;">
+<% if (dataApartments && dataApartments.length > 0) { %>
+    <div class="d-flex justify-content-center my-5">
+        <div class="row g-5 w-100 justify-content-between" style="max-width: 1100px; margin: auto;">
+            <% dataApartments.forEach(function(apartment) { %>
+                <div class="col-lg-4 col-md-6 mb-5">
+                    <div class="card h-100 shadow-sm">
+                        <% const mainPhoto = apartment.photos.find(photo => photo.isMain); %>
+                        <% if (mainPhoto) { %>
+                            <img src="<%= mainPhoto.url %>" class="card-img-top" alt="Foto principal"
+                                style="height: 250px; object-fit: cover;">
+                        <% } else { %>
+                            <img src="/img/default.jpg" class="card-img-top" alt="Sin foto disponible"
+                                style="height: 250px; object-fit: cover;">
+                        <% } %>
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title fs-5">
+                                <a href="/apartments/<%= apartment._id %>"
+                                    class="text-decoration-none text-dark">
+                                    <%= apartment.title %>
+                                </a>
+                            </h5>
 
-                <% dataApartments.forEach(function(apartment) { %>
-                    <div class="col-md-6 col-lg-5">
-                        <div class="card h-100 shadow-sm">
-                            <% const mainPhoto=apartment.photos.find(photo=> photo.isMain); %>
-                                <% if (mainPhoto) { %>
-                                    <img src="<%= mainPhoto.url %>" class="card-img-top" alt="Foto principal"
-                                        style="height: 200px; object-fit: cover;">
-                                    <% } else { %>
-                                        <img src="/img/default.jpg" class="card-img-top" alt="Sin foto disponible"
-                                            style="height: 200px; object-fit: cover;">
-                                        <% } %>
-                                            <div class="card-body d-flex flex-column">
-                                                <h5 class="card-title">
-                                                    <a href="/apartments/<%= apartment._id %>"
-                                                        class="text-decoration-none text-dark">
-                                                        <%= apartment.title %>
-                                                    </a>
-                                                </h5>
+                            <p class="card-text mb-3">
+                                <strong>Precio:</strong> <%= apartment.price %> €/noche<br>
+                                <strong>M²:</strong> <%= apartment.squareMeters %> m²
+                            </p>
 
-                                                <p class="card-text mb-2">
-                                                    <strong>Precio:</strong>
-                                                    <%= apartment.price %> €/noche<br>
-                                                        <strong>M²:</strong>
-                                                        <%= apartment.squareMeters %> m²
-                                                </p>
+                            <p class="card-text text-muted small">
+                                <strong>Servicios:</strong><br>
+                                <% if (apartment.services.airConditioning) { %>
+                                    <i class="bi bi-snow text-black me-1"></i> |
+                                <% } %>
+                                <% if (apartment.services.heating) { %>
+                                    <i class="bi bi-fire text-black me-1"></i> |
+                                <% } %>
+                                <% if (apartment.services.accessibility) { %>
+                                    <i class="bi bi-person-wheelchair text-black me-1"></i> |
+                                <% } %>
+                                <% if (apartment.services.television) { %>
+                                    <i class="bi bi-tv text-black me-1"></i> |
+                                <% } %>
+                                <% if (apartment.services.kitchen) { %>
+                                    <i class="bi bi-cup-hot text-black me-1"></i> |
+                                <% } %>
+                                <% if (apartment.services.internet) { %>
+                                    <i class="bi bi-wifi text-black me-1"></i>
+                                <% } %>
+                            </p>
 
-                                                <p class="card-text text-muted small">
-                                                    <strong>Servicios:</strong><br>
-                                                    <% if (apartment.services.airConditioning) { %> <i
-                                                            class="bi bi-snow text-black me-1"> </i>|
-                                                        <% } %>
-                                                            <% if (apartment.services.heating) { %> <i
-                                                                    class="bi bi-fire text-black me-1"></i> | <% } %>
-                                                                    <% if (apartment.services.accessibility) { %>
-                                                                        <i
-                                                                            class="bi bi-person-wheelchair text-black me-1"></i>
-                                                                        | <% } %>
-                                                                            <% if (apartment.services.television) { %>
-                                                                                <i class="bi bi-tv text-black me-1"></i>
-                                                                                | <% } %>
-                                                                                    <% if (apartment.services.kitchen) {
-                                                                                        %> <i
-                                                                                            class="bi bi-cup-hot text-black me-1"></i>
-                                                                                        | <% } %>
-                                                                                            <% if
-                                                                                                (apartment.services.internet)
-                                                                                                { %> <i
-                                                                                                    class="bi bi-wifi text-black me-1"></i>
-                                                                                                <% } %>
-                                                </p>
-                                                <div class="mt-auto d-flex gap-2">
-                                                    <a href="/apartments/<%= apartment._id %>"
-                                                        class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                                                </div>
-                                            </div>
+                            <div class="mt-auto d-flex gap-3">
+                                <a href="/apartments/<%= apartment._id %>"
+                                    class="btn btn-outline-primary">Ver detalles</a>
+                            </div>
                         </div>
                     </div>
-
-                    <% }); %>
-
-            </div>
+                </div>
+            <% }); %>
         </div>
-        <% } else { %>
-            <p class="text-center my-5">No hay apartamentos disponibles.</p>
-            <% } %>
+    </div>
+<% } else { %>
+    <p class="text-center my-5">No hay apartamentos disponibles.</p>
+<% } %>
