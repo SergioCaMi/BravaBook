@@ -76,27 +76,27 @@
                     </ul>
 
                     <p class="mb-2"><strong>Servicios:</strong></p>
+
                     <ul class="list-inline mb-4">
                         <% if (dataApartments.services.airConditioning) { %>
-                            <li class="list-inline-item">Aire Acondicionado,</li>
+    <i class="bi bi-snow text-black me-1" data-bs-toggle="tooltip" title="Aire Acondicionado"></i>
                         <% } %>
                         <% if (dataApartments.services.heating) { %>
-                            <li class="list-inline-item">Calefacción,</li>
+    <i class="bi bi-fire text-black me-1" data-bs-toggle="tooltip" title="Calefacción"></i>
                         <% } %>
                         <% if (dataApartments.services.accessibility) { %>
-                            <li class="list-inline-item">Accesibilidad,</li>
+    <i class="bi bi-person-wheelchair text-black me-1" data-bs-toggle="tooltip" title="Accesibilidad"></i>
                         <% } %>
                         <% if (dataApartments.services.television) { %>
-                            <li class="list-inline-item">Televisión,</li>
+    <i class="bi bi-tv text-black me-1" data-bs-toggle="tooltip" title="Televisión"></i>
                         <% } %>
                         <% if (dataApartments.services.kitchen) { %>
-                            <li class="list-inline-item">Cocina,</li>
+    <i class="bi bi-cup-hot text-black me-1" data-bs-toggle="tooltip" title="Cocina"></i>
                         <% } %>
                         <% if (dataApartments.services.internet) { %>
-                            <li class="list-inline-item">Internet</li>
+    <i class="bi bi-wifi text-black me-1" data-bs-toggle="tooltip" title="Internet"></i>
                         <% } %>
                     </ul>
-
                     <p><strong>Ubicación:</strong> <%= dataApartments.location.city %>, <%= dataApartments.location.province %></p>
                 <% } else { %>
                     <p class="alert alert-warning">No hay apartamentos disponibles.</p>

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const apartmentSchema = new Schema({
   title: {
@@ -58,8 +58,6 @@ const apartmentSchema = new Schema({
   },
 });
 
-
-
 const reservationSchema = new Schema({
   apartmentId: {
     type: Schema.Types.ObjectId,
@@ -87,9 +85,11 @@ const reservationSchema = new Schema({
     enum: ["confirmed", "cancelled"],
     default: "confirmed",
   },
+  paid: {
+    type: Boolean,
+    default: true,
+  },
 });
-
-
 
 const Reservation = model("Reservation", reservationSchema);
 const Apartment = model("Apartment", apartmentSchema);
