@@ -6,6 +6,7 @@ import { Apartment, Reservation } from "../models/brababook.model.js";
 function getRenderObject(
   title,
   dataApartments = null,
+  dataReservations = null,
   req = null,
   user = null,
   message,
@@ -23,6 +24,7 @@ function getRenderObject(
   return {
     title,
     dataApartments,
+    dataReservations,
     message,
     user: userData,
     currentPage,
@@ -35,10 +37,12 @@ function getRenderObject(
 // *** Mostramos todos los apartamentos activos ***
 router.get("/", async (req, res) => {
   try {
+    const dataReservations = [];
     const dataApartments = await Apartment.find({ active: true }).limit(12);
     const renderData = getRenderObject(
       "Inicio",
       dataApartments,
+      dataReservations,
       req,
       null,
       undefined,
@@ -59,10 +63,12 @@ router.get("/", async (req, res) => {
 // *** Mostramos la pagina de Acerca de... ***
 // TODO: gestionar quién puede entrar
 router.get("/about", (req, res) => {
+      const dataReservations = [];
   const dataApartments = [];
   const renderData = getRenderObject(
     "Acerca de...",
     dataApartments,
+    dataReservations,
     req,
     null,
     undefined,
@@ -75,10 +81,12 @@ router.get("/about", (req, res) => {
 // *** Mostramos la pagina de Contacto ***
 // TODO: gestionar quién puede entrar
 router.get("/contact", (req, res) => {
+      const dataReservations = [];
   const dataApartments = [];
   const renderData = getRenderObject(
     "Contacta con nosotros",
     dataApartments,
+    dataReservations,
     req,
     null, 
     undefined,
@@ -91,10 +99,12 @@ router.get("/contact", (req, res) => {
 // *** Mostramos la pagina de administradores ***
 // TODO: gestionar quién puede entrar
 router.get("/admin", (req, res) => {
+      const dataReservations = [];
   const dataApartments = [];
   const renderData = getRenderObject(
     "Administrador",
     dataApartments,
+    dataReservations,
     req,
     null,
     undefined,
@@ -107,10 +117,12 @@ router.get("/admin", (req, res) => {
 // ******************** Formulario para añadir nuevo apartamento ********************
 // *** Mostramos El formulario para añadir un nuevo apartamento ***
 router.get("/admin/apartment/new", async (req, res) => {
+      const dataReservations = [];
   const dataApartments = [];
   const renderData = getRenderObject(
     "Añadir nuevo apartamento",
     dataApartments,
+    dataReservations,
     req,
     null,
     undefined,
@@ -209,6 +221,7 @@ router.post("/admin/apartment", async (req, res) => {
     const renderData = getRenderObject(
       dataApartments.title,
       dataApartments,
+      dataReservations,
       req,
       null,
       undefined,
@@ -224,13 +237,53 @@ router.post("/admin/apartment", async (req, res) => {
 // *** Mostramos todos los apartamentos ***
 router.get("/apartments", async (req, res) => {
   try {
-    const apartments = await Apartment.find({ active: true });
-    console.log("desde GET /apartments hasta home.ejs");
-    res.status(200).json({ apartments });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const dataReservations = [];
+    const dataApartments = await Apartment.find({ active: true });
+    const renderData = getRenderObject(
+      "Inicio",
+      dataApartments,
+      dataReservations,
+      req,
+      null,
+      undefined,
+      "home"
+    );
+    console.log("desde GET / hasta home.ejs");
+    res.status(200).render("searchApartmens.ejs", renderData);
+  } catch (error) {
+    console.error("Error al obtener apartamentos:", error);
+    res.status(500).render("error.ejs", {
+      message: "Error interno del servidor",
+      status: 404,
+    });
   }
 });
+
+// *** Mostramos todas las reservas ***
+router.get("/reservations", async (req, res) => {
+  try {
+    const dataReservations = await Reservation.find()
+    const dataApartments = [];
+    const renderData = getRenderObject(
+      "Inicio",
+      dataApartments,
+      dataReservations,
+      req,
+      null,
+      undefined,
+      "home"
+    );
+    console.log("desde GET / hasta home.ejs");
+    res.status(200).render("reservations.ejs", renderData);
+  } catch (error) {
+    console.error("Error al obtener apartamentos:", error);
+    res.status(500).render("error.ejs", {
+      message: "Error interno del servidor",
+      status: 404,
+    });
+  }
+});
+
 
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
@@ -325,6 +378,7 @@ router.get("/apartments/search", async (req, res) => {
     const renderData = getRenderObject(
       apartments.title,
       apartments,
+      reservation, 
       req,
       null,
       undefined,
@@ -345,6 +399,7 @@ router.get("/apartments/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
+    const dataReservations = [];
     const dataApartments = await Apartment.findOne({ _id: id, active: true });
     if (!dataApartments) {
       return res.status(404).json({ message: "Apartamento no encontrado" });
@@ -353,6 +408,7 @@ router.get("/apartments/:id", async (req, res) => {
     const renderData = getRenderObject(
       dataApartments.title,
       dataApartments,
+      dataReservations,
       req,
       null,
       undefined,
@@ -363,6 +419,7 @@ router.get("/apartments/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // ********** RECURSOS **********
 
