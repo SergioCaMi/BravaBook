@@ -1,6 +1,105 @@
 <%- include("templates/header", { title: title }) %>
-    <div class="position-relative my-5" style="width: 100%;">
-        <h2>En contstrucción</h2>
-    </div>
 
-    <%- include("templates/footer") %>
+<main class="container my-4">
+    <div class="card h-100 shadow-sm">
+        <!-- Pestañas -->
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="apartmentTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="photos-tab" data-bs-toggle="tab" data-bs-target="#photos" type="button" role="tab" aria-controls="photos" aria-selected="true">
+                        Fotos y Descripción
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false">
+                        Detalles
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contenido de las pestañas -->
+        <div class="card-body tab-content" id="apartmentTabContent">
+            
+            <!-- Pestaña 1: Fotos y Descripción -->
+            <div class="tab-pane fade show active" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                <% if (dataApartments) { %>
+                    <!-- Carrusel -->
+                    <div id="apartmentCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <% dataApartments.photos.forEach((photo, index) => { %>
+                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                    <img src="<%= photo.url %>" class="d-block w-100" alt="<%= photo.description %>" style="object-fit: cover; height: 500px;">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <p><%= photo.description %></p>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#apartmentCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#apartmentCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+
+                    <!-- Descripción -->
+                    <h3><%= dataApartments.title %></h3>
+                    <p><%= dataApartments.description %></p>
+                <% } else { %>
+                    <p class="alert alert-warning">No hay apartamentos disponibles.</p>
+                <% } %>
+            </div>
+
+            <!-- Pestaña 2: Detalles -->
+            <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <% if (dataApartments) { %>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item"><strong>Habitaciones:</strong> <%= dataApartments.rooms %></li>
+                        <li class="list-group-item"><strong>Baños:</strong> <%= dataApartments.bathrooms %></li>
+                        <li class="list-group-item"><strong>Precio por noche:</strong> <%= dataApartments.price %> €</li>
+                        <li class="list-group-item"><strong>Máximo de huéspedes:</strong> <%= dataApartments.maxGuests %></li>
+                        <li class="list-group-item"><strong>Metros cuadrados:</strong> <%= dataApartments.squareMeters %> m²</li>
+                    </ul>
+
+                    <p class="mb-2"><strong>Servicios:</strong></p>
+                    <ul class="list-inline mb-4">
+                        <% if (dataApartments.services.airConditioning) { %>
+                            <li class="list-inline-item">Aire Acondicionado,</li>
+                        <% } %>
+                        <% if (dataApartments.services.heating) { %>
+                            <li class="list-inline-item">Calefacción,</li>
+                        <% } %>
+                        <% if (dataApartments.services.accessibility) { %>
+                            <li class="list-inline-item">Accesibilidad,</li>
+                        <% } %>
+                        <% if (dataApartments.services.television) { %>
+                            <li class="list-inline-item">Televisión,</li>
+                        <% } %>
+                        <% if (dataApartments.services.kitchen) { %>
+                            <li class="list-inline-item">Cocina,</li>
+                        <% } %>
+                        <% if (dataApartments.services.internet) { %>
+                            <li class="list-inline-item">Internet</li>
+                        <% } %>
+                    </ul>
+
+                    <p><strong>Ubicación:</strong> <%= dataApartments.location.city %>, <%= dataApartments.location.province %></p>
+                <% } else { %>
+                    <p class="alert alert-warning">No hay apartamentos disponibles.</p>
+                <% } %>
+            </div>
+
+        </div>
+
+        <!-- Botón volver -->
+        <div class="card-footer text-end">
+            <a href="/" class="btn btn-primary">Volver a Home</a>
+        </div>
+    </div>
+</main>
+
+<%- include("templates/footer") %>
