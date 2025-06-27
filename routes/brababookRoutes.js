@@ -349,7 +349,7 @@ router.get("/apartments/:id", async (req, res) => {
     if (!dataApartments) {
       return res.status(404).json({ message: "Apartamento no encontrado" });
     }
-    console.log("desde GET /apartments/:id hasta viewApartment.ejs");
+    console.log("desde GET /apartments/:id hasta detailApartment.ejs");
     const renderData = getRenderObject(
       dataApartments.title,
       dataApartments,
@@ -358,7 +358,7 @@ router.get("/apartments/:id", async (req, res) => {
       undefined,
       "home"
     );
-    res.status(200).render("viewApartment.ejs", renderData);
+    res.status(200).render("detailApartment.ejs", renderData);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
