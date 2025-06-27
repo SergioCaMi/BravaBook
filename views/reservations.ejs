@@ -1,51 +1,58 @@
 <%- include("templates/header", { title: title }) %>
-<div class="container my-5">
-  <h3 class="mb-4 text-center">Lista de Reservas</h3>
+    <div class="container my-5">
+        <h3 class="mb-4 text-center">Lista de Reservas</h3>
 
-  <% if (dataReservations && dataReservations.length > 0) { %>
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-dark">
-          <tr>
-            <th>Huésped</th>
-            <th>Apartamento ID</th>
-            <th>Fechas</th>
-            <th>Email</th>
-            <th>Estado</th>
-            <th>Pagado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% dataReservations.forEach(reservation => { %>
-            <tr>
-              <td><strong><%= reservation.guestName %></strong></td>
-              <td><code><%= reservation.apartmentId %></code></td>
-              <td>
-                <%= new Date(reservation.startDate).toLocaleDateString() %> – 
-                <%= new Date(reservation.endDate).toLocaleDateString() %>
-              </td>
-              <td><%= reservation.guestEmail %></td>
-              <td>
-                <span class="badge <%= reservation.status === 'confirmed' ? 'bg-success' : 'bg-danger' %>">
-                  <%= reservation.status %>
-                </span>
-              </td>
-              <td class="text-center">
-                <% if (reservation.paid) { %>
-                  <i class="bi bi-check-circle-fill text-success fs-5"></i>
-                <% } else { %>
-                  <i class="bi bi-x-circle-fill text-danger fs-5"></i>
+        <% if (dataReservations && dataReservations.length> 0) { %>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Huésped</th>
+                            <th>Apartamento ID</th>
+                            <th>Fechas</th>
+                            <th>Email</th>
+                            <th>Estado</th>
+                            <th>Pagado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% dataReservations.forEach(reservation=> { %>
+                            <tr>
+                                <td><strong>
+                                        <%= reservation.guestName %>
+                                    </strong></td>
+                                <td><a
+                                        href="/apartments/<%= reservation.apartmentId %>"><code><%= reservation.apartmentId %></code></a>
+                                </td>
+                                <td>
+                                    <%= new Date(reservation.startDate).toLocaleDateString() %> –
+                                        <%= new Date(reservation.endDate).toLocaleDateString() %>
+                                </td>
+                                <td>
+                                    <%= reservation.guestEmail %>
+                                </td>
+                                <td>
+                                    <span
+                                        class="badge <%= reservation.status === 'confirmed' ? 'bg-success' : 'bg-danger' %>">
+                                        <%= reservation.status %>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <% if (reservation.paid) { %>
+                                        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                        <% } else { %>
+                                            <i class="bi bi-x-circle-fill text-danger fs-5"></i>
+                                            <% } %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <% } else { %>
+                <div class="alert alert-info text-center" role="alert">
+                    No hay reservas disponibles.
+                </div>
                 <% } %>
-              </td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
     </div>
-  <% } else { %>
-    <div class="alert alert-info text-center" role="alert">
-      No hay reservas disponibles.
-    </div>
-  <% } %>
-</div>
     <%- include("templates/footer") %>
