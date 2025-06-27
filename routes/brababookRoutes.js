@@ -37,12 +37,11 @@ function getRenderObject(
 // *** Mostramos todos los apartamentos activos ***
 router.get("/", async (req, res) => {
   try {
-    const dataReservations = [];
     const dataApartments = await Apartment.find({ active: true }).limit(12);
     const renderData = getRenderObject(
       "Inicio",
       dataApartments,
-      dataReservations,
+      [],
       req,
       null,
       undefined,
@@ -63,12 +62,10 @@ router.get("/", async (req, res) => {
 // *** Mostramos la pagina de Acerca de... ***
 // TODO: gestionar quién puede entrar
 router.get("/about", (req, res) => {
-      const dataReservations = [];
-  const dataApartments = [];
   const renderData = getRenderObject(
     "Acerca de...",
-    dataApartments,
-    dataReservations,
+    [],
+    [],
     req,
     null,
     undefined,
@@ -81,12 +78,10 @@ router.get("/about", (req, res) => {
 // *** Mostramos la pagina de Contacto ***
 // TODO: gestionar quién puede entrar
 router.get("/contact", (req, res) => {
-      const dataReservations = [];
-  const dataApartments = [];
   const renderData = getRenderObject(
     "Contacta con nosotros",
-    dataApartments,
-    dataReservations,
+    [],
+    [],
     req,
     null, 
     undefined,
@@ -99,12 +94,10 @@ router.get("/contact", (req, res) => {
 // *** Mostramos la pagina de administradores ***
 // TODO: gestionar quién puede entrar
 router.get("/admin", (req, res) => {
-      const dataReservations = [];
-  const dataApartments = [];
   const renderData = getRenderObject(
     "Administrador",
-    dataApartments,
-    dataReservations,
+    [],
+    [],
     req,
     null,
     undefined,
@@ -117,12 +110,10 @@ router.get("/admin", (req, res) => {
 // ******************** Formulario para añadir nuevo apartamento ********************
 // *** Mostramos El formulario para añadir un nuevo apartamento ***
 router.get("/admin/apartment/new", async (req, res) => {
-      const dataReservations = [];
-  const dataApartments = [];
   const renderData = getRenderObject(
     "Añadir nuevo apartamento",
-    dataApartments,
-    dataReservations,
+    [],
+    [],
     req,
     null,
     undefined,
@@ -237,12 +228,11 @@ router.post("/admin/apartment", async (req, res) => {
 // *** Mostramos todos los apartamentos ***
 router.get("/apartments", async (req, res) => {
   try {
-    const dataReservations = [];
     const dataApartments = await Apartment.find({ active: true });
     const renderData = getRenderObject(
       "Inicio",
       dataApartments,
-      dataReservations,
+      [],
       req,
       null,
       undefined,
@@ -263,10 +253,9 @@ router.get("/apartments", async (req, res) => {
 router.get("/reservations", async (req, res) => {
   try {
     const dataReservations = await Reservation.find()
-    const dataApartments = [];
     const renderData = getRenderObject(
       "Inicio",
-      dataApartments,
+      [],
       dataReservations,
       req,
       null,
@@ -372,13 +361,12 @@ router.get("/apartments/search", async (req, res) => {
   }
   try {
     console.log("Query final:", query);
-
     const apartments = await Apartment.find(query);
     console.log("Resultados:", apartments.length);
     const renderData = getRenderObject(
       apartments.title,
       apartments,
-      reservation, 
+      [], 
       req,
       null,
       undefined,
@@ -399,7 +387,6 @@ router.get("/apartments/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const dataReservations = [];
     const dataApartments = await Apartment.findOne({ _id: id, active: true });
     if (!dataApartments) {
       return res.status(404).json({ message: "Apartamento no encontrado" });
@@ -408,7 +395,7 @@ router.get("/apartments/:id", async (req, res) => {
     const renderData = getRenderObject(
       dataApartments.title,
       dataApartments,
-      dataReservations,
+      [],
       req,
       null,
       undefined,
