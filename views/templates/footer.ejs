@@ -177,6 +177,16 @@
             municipiSelect.innerHTML = '<option value="">No hay municipios disponibles</option>';
         }
     }
+    // Entrar en Reservas desde lista de apartamentos
+    document.addEventListener("DOMContentLoaded", function () {
+        const hash = window.location.hash;
+
+        if (hash === "#reservation") {
+            const reservationTab = new bootstrap.Tab(document.getElementById("reservation-tab"));
+            reservationTab.show();
+        }
+    });
+
 
     // Busco el id mediante el texto de la provincia
     provinceSelect.addEventListener("change", () => {
