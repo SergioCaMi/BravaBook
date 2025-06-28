@@ -28,14 +28,18 @@
                             <!-- *** Fila 1 *** -->
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label for="locationProvince" class="form-label">Provincia:</label>
-                                    <input type="text" name="location.province" id="locationProvince"
-                                        class="form-control">
+                                    <label for="provinceSelect" class="form-label">Selecciona una provincia:</label>
+                                    <select id="provinceSelect" class="form-control form-select mb-3">
+                                        <option value="">-- Selecciona una provincia --</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="locationCity" class="form-label">Ciudad:</label>
-                                    <input type="text" name="location.city" id="locationCity" class="form-control">
+                                    <label for="municipalitySelect" class="form-label">Selecciona un municipio:</label>
+                                    <select id="municipalitySelect" class="form-control form-select" >
+                                        <option value="">-- Selecciona un municipio --</option>
+                                    </select>
                                 </div>
+<input type="hidden" name="location[province]" id="provinceNameInput">
                                 <div class="col-md-4">
                                     <label for="maxGuests" class="form-label">Capacidad máxima:</label>
                                     <input type="number" name="maxGuests" id="maxGuests" class="form-control" min="1">

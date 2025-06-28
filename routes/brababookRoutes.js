@@ -210,15 +210,15 @@ router.post("/admin/apartment", async (req, res) => {
     await newApartment.save();
     console.log("desde POST /admin/apartment hasta home.ejs");
     const renderData = getRenderObject(
-      dataApartments.title,
-      dataApartments,
-      dataReservations,
+      "",
+      [],
+      [],
       req,
       null,
       undefined,
-      "home"
+      "admin"
     );
-    res.status(200).render("viewApartment.ejs", renderData);
+    res.status(200).render("adminApartment.ejs", renderData);
   } catch (error) {
     console.error("Error:", error);
   }

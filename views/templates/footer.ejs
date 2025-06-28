@@ -4,16 +4,16 @@
     crossorigin="anonymous"></script>
 <script>
 
+    // ********** ToolTips **********
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 
 
-    let photoCount = 0;
-    // let urls = [];
-
     // ********** Función para añadir imagenes **********
+    let photoCount = 0;
+
     function addPhotoField() {
         const container = document.getElementById('photosContainer');
         const fieldset = document.createElement('fieldset');
@@ -53,23 +53,21 @@
         function generateBedInputs() {
             const roomCount = parseInt(document.getElementById("rooms").value) || 0;
             const bedsContainer = document.getElementById("bedsContainer");
-            bedsContainer.innerHTML = ""; // Limpiar contenido anterior
+            bedsContainer.innerHTML = "";
 
             if (roomCount <= 0) return;
 
-            // Título
             const title = document.createElement("h6");
             title.textContent = "Camas por habitación:";
             title.className = "mb-3";
             bedsContainer.appendChild(title);
 
-            // Contenedor de filas
             const row = document.createElement("div");
             row.className = "row g-3";
 
             for (let i = 0; i < roomCount; i++) {
                 const col = document.createElement("div");
-                col.className = "col-md-6"; // Dos por fila en md+
+                col.className = "col-md-6";
 
                 const label = document.createElement("label");
                 label.setAttribute("for", `bedsPerRoom[${i}]`);
@@ -84,15 +82,12 @@
                 input.required = true;
                 input.className = "form-control";
 
-                // Agregar al column
                 col.appendChild(label);
                 col.appendChild(input);
 
-                // Agregar columna a la fila
                 row.appendChild(col);
             }
 
-            // Agregar fila al contenedor
             bedsContainer.appendChild(row);
         }
         roomsInput.addEventListener("input", generateBedInputs);
@@ -104,32 +99,97 @@
     function addRuleField() {
         const container = document.getElementById("rulesContainer");
 
-        // Crear div agrupador
         const group = document.createElement("div");
         group.className = "mb-2";
 
-        // Label
         const label = document.createElement("label");
         label.setAttribute("for", `rules[${ruleCount}]`);
         label.textContent = `Regla #${ruleCount + 1}:`;
         label.className = "form-label";
 
-        // Input
         const input = document.createElement("input");
         input.type = "text";
         input.name = `rules[]`;
         input.placeholder = "Ej: CheckOut antes de las 12am.";
         input.className = "form-control";
 
-        // Agregar elementos al grupo
         group.appendChild(label);
         group.appendChild(input);
 
-        // Agregar grupo al contenedor
         container.appendChild(group);
 
         ruleCount++;
-    }   
+    }
+
+    // ********** Provincias y Municipios **********
+    const provinceSelect = document.getElementById('provinceSelect');
+    const municipiSelect = document.getElementById('municipalitySelect');
+
+    let provincias = [];
+    let municipios = [];
+
+    // Función para cargar datos JSON
+    async function cargarDatos() {
+        console.log("Cargando datos de ciudades y provincias...");
+        try {
+            const resProvincias = await fetch('/data/province.json');
+            const resMunicipios = await fetch('/data/city.json');
+
+            if (!resProvincias.ok || !resMunicipios.ok) {
+                throw new Error('Error al cargar datos de los archivos JSON');
+            }
+
+            provincias = await resProvincias.json();
+            municipios = await resMunicipios.json();
+            provincias.sort((a, b) => a.nm.localeCompare(b.nm));
+            rellenarProvinces();
+        } catch (error) {
+            console.error('Error:', error);
+            console.log('No se pudieron cargar los datos. Inténtalo más tarde.');
+        }
+    }
+
+    function rellenarProvinces() {
+        provinceSelect.innerHTML = '<option value="">-- Selecciona una provincia --</option>';
+        provincias.forEach(prov => {
+            const option = document.createElement('option');
+            option.value = prov.nm;
+            option.textContent = prov.nm;
+            provinceSelect.appendChild(option);
+        });
+    }
+
+    function updateMunicipios(provinceId) {
+        if (!provinceId) {
+            municipiSelect.innerHTML = '<option value="">-- Selecciona un municipio --</option>';
+            return;
+        }
+
+        const filtered = municipios.filter(mun => mun.id.startsWith(provinceId));
+        filtered.sort((a, b) => a.nm.localeCompare(b.nm));
+
+        if (filtered.length > 0) {
+            municipiSelect.innerHTML = `
+      <option value="">-- Selecciona un municipio --</option>
+      ${filtered.map(m => `<option value="${m.nm}">${m.nm}</option>`).join('')} 
+    `;
+        } else {
+            municipiSelect.innerHTML = '<option value="">No hay municipios disponibles</option>';
+        }
+    }
+
+    // Busco el id mediante el texto de la provincia
+    provinceSelect.addEventListener("change", () => {
+        const selectedText = provinceSelect.options[provinceSelect.selectedIndex].text;
+        const selectedProvince = provincias.find(p => p.nm === selectedText);
+
+        if (selectedProvince) {
+            updateMunicipios(selectedProvince.id);
+        } else {
+            updateMunicipios(null);
+        }
+    });
+    cargarDatos();
 </script>
 <button type="button" class="btn btn-primary d-flex align-items-center m-3" onclick="window.history.back()">
     <i class="bi bi-arrow-counterclockwise me-2"></i> Volver atrás

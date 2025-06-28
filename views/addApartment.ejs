@@ -131,12 +131,21 @@
   <!-- Ubicación -->
   <div class="row g-3 mb-4">
     <div class="col-md-4">
-      <label for="location[province]" class="form-label">Provincia:</label>
-      <input type="text" name="location[province]" class="form-control" />
+                                  <label for="provinceSelect" class="form-label">Selecciona una provincia:</label>
+<select id="provinceSelect" name="location[province]" class="form-control form-select mb-3">
+  <option value="">-- Selecciona una provincia --</option>
+</select>
+
+      <!-- <label for="location[province]" class="form-label">Provincia:</label>
+      <input type="text" name="location[province]" class="form-control" /> -->
     </div>
     <div class="col-md-4">
-      <label for="location[city]" class="form-label">Ciudad:</label>
-      <input type="text" name="location[city]" class="form-control" />
+                                  <label for="municipalitySelect" class="form-label">Selecciona un municipio:</label>
+<select id="municipalitySelect" name="location[city]" class="form-control form-select">
+  <option value="">-- Selecciona un municipio --</option>
+</select>
+      <!-- <label for="location[city]" class="form-label">Ciudad:</label>
+      <input type="text" name="location[city]" class="form-control" /> -->
     </div>
     <div class="col-md-2">
       <label for="location[gpsCoordinates][lat]" class="form-label">Latitud (GPS):</label>

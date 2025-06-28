@@ -36,6 +36,7 @@ app.set("view engine", "ejs");
 
 // ********** Motor de vistas EJS **********
 app.use(express.static("public"));
+app.use("/data", express.static("data"));
 
 // ******************** Rutas de login y logout con Google ********************
 // ********** Ruta que manda al usuario a iniciar sesión con Google **********
