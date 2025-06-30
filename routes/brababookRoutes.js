@@ -291,11 +291,12 @@ router.get("/apartments/search", async (req, res) => {
     "services.television": television,
     "services.kitchen": kitchen,
     "services.internet": internet,
-    "location.province": province,
-    "location.city": city,
-    "location.gpsCoordinates.lat": lat,
-    "location.gpsCoordinates.lng": lng,
   } = req.query;
+
+const province = req.query["location[province]"];
+const city = req.query["location[city]"];
+
+console.log("Provincia recibida:", province); 
 
   const query = {};
   query.active = true;

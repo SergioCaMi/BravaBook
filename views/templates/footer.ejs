@@ -4,11 +4,6 @@
     crossorigin="anonymous"></script>
 <script>
 
-    // ********** ToolTips **********
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
 
 
     // ********** Función para añadir imagenes **********
@@ -40,8 +35,15 @@
 
 
 
-    // ********** Función para añadir camas **********
     document.addEventListener("DOMContentLoaded", () => {
+        // ********** ToolTips **********
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        // ********** Función para añadir camas **********
+
         const roomsInput = document.getElementById("rooms");
         const bedsContainer = document.getElementById("bedsContainer");
 
@@ -177,6 +179,28 @@
             municipiSelect.innerHTML = '<option value="">No hay municipios disponibles</option>';
         }
     }
+
+    function updateHiddenFields() {
+        const provinceSelect = document.getElementById("provinceSelect");
+        const selectedProvinceText = provinceSelect.options[provinceSelect.selectedIndex]?.text || "";
+        const provinceHiddenInput = document.getElementById("provinceNameInput");
+
+        if (selectedProvinceText.includes("Selecciona")) {
+            provinceHiddenInput.value = "";
+        } else {
+            provinceHiddenInput.value = selectedProvinceText;
+        }
+
+        const municipalitySelect = document.getElementById("municipalitySelect");
+        const selectedMunicipalityText = municipalitySelect.options[municipalitySelect.selectedIndex]?.text || "";
+        const municipalityHiddenInput = document.getElementById("municipalityNameInput");
+
+        if (selectedMunicipalityText.includes("Selecciona")) {
+            municipalityHiddenInput.value = "";
+        } else {
+            municipalityHiddenInput.value = selectedMunicipalityText;
+        }
+    }
     // Entrar en Reservas desde lista de apartamentos
     document.addEventListener("DOMContentLoaded", function () {
         const hash = window.location.hash;
@@ -186,8 +210,9 @@
             reservationTab.show();
         }
 
-        
+
     });
+
 
 
     // Busco el id mediante el texto de la provincia

@@ -24,7 +24,7 @@
                     style="max-width: 800px; z-index: 10;">
                     <div class="bg-white p-4 rounded shadow-sm">
                         <h4 class="mb-4 text-center">Filtrar apartamentos</h4>
-                        <form action="/apartments/search" method="GET">
+                        <form action="/apartments/search" method="GET" onsubmit="updateHiddenFields()">
                             <!-- *** Fila 1 *** -->
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
@@ -35,11 +35,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="municipalitySelect" class="form-label">Selecciona un municipio:</label>
-                                    <select id="municipalitySelect" class="form-control form-select" >
+                                    <select id="municipalitySelect" class="form-control form-select">
                                         <option value="">-- Selecciona un municipio --</option>
                                     </select>
                                 </div>
-<input type="hidden" name="location[province]" id="provinceNameInput">
+                                <input type="hidden" name="location[province]" id="provinceNameInput">
+                                <input type="hidden" name="location[city]" id="municipalityNameInput">
                                 <div class="col-md-4">
                                     <label for="maxGuests" class="form-label">Capacidad máxima:</label>
                                     <input type="number" name="maxGuests" id="maxGuests" class="form-control" min="1">
