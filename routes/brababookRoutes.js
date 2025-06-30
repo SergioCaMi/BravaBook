@@ -253,7 +253,7 @@ router.get("/apartments", async (req, res) => {
 // *** Mostramos todas las reservas ***
 router.get("/reservations", async (req, res) => {
   try {
-    const dataReservations = await Reservation.find();
+    const dataReservations = await Reservation.find().sort("startDate");
     const renderData = getRenderObject(
       "Inicio",
       [],

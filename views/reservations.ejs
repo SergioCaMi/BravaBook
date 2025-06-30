@@ -16,8 +16,10 @@
                         </tr>
                     </thead>
                     <tbody>
+                        
                         <% dataReservations.forEach(reservation=> { %>
-                            <tr class="<%= new Date(reservation.endDate) < new Date() ? 'table-secondary' : '' %>">
+                            <tr
+                                class="<%= new Date(reservation.endDate).getTime() < new Date().getTime() ? 'table-light' : 'table-success' %>">
                                 <td><strong>
                                         <%= reservation.guestName %>
                                     </strong></td>
