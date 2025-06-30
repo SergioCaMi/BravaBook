@@ -83,7 +83,7 @@ router.get("/contact", (req, res) => {
     [],
     [],
     req,
-    null, 
+    null,
     undefined,
     "contact"
   );
@@ -249,10 +249,11 @@ router.get("/apartments", async (req, res) => {
   }
 });
 
+// ********** Reservas **********
 // *** Mostramos todas las reservas ***
 router.get("/reservations", async (req, res) => {
   try {
-    const dataReservations = await Reservation.find()
+    const dataReservations = await Reservation.find();
     const renderData = getRenderObject(
       "Inicio",
       [],
@@ -272,7 +273,6 @@ router.get("/reservations", async (req, res) => {
     });
   }
 });
-
 
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
@@ -366,7 +366,7 @@ router.get("/apartments/search", async (req, res) => {
     const renderData = getRenderObject(
       apartments.title,
       apartments,
-      [], 
+      [],
       req,
       null,
       undefined,
@@ -377,7 +377,10 @@ router.get("/apartments/search", async (req, res) => {
     // res.json(apartments);
   } catch (error) {
     console.error("Error al buscar apartamentos:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).render("error.ejs", {
+      message: "Error interno del servidor",
+      status: 404,
+    });
   }
 });
 
@@ -403,12 +406,57 @@ router.get("/apartments/:id", async (req, res) => {
     );
     res.status(200).render("detailApartment.ejs", renderData);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).render("error.ejs", {
+      message: "Error interno del servidor",
+      status: 404,
+    });
   }
 });
 
+// ********** Reservas nuevas **********
+router.post("/reservations/new-reservation", async (req, res) => {
+  const { apartmentId, guestName, guestEmail } = req.body;
+  const startDate = new Date(req.body.startDate);
+  const endDate = new Date(req.body.endDate);
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    return res.status(400).send("Fechas inválidas");
+  }
+  //TODO: qué hacemos después de informar sobre fechas inválidas?
 
-// ********** RECURSOS **********
+  const status = "confirmed";
+  const paid = true;
+  console.log(req.body, status, paid);
+  try {
+    const dataReservations = await Reservation.find({
+      apartmentId: apartmentId,
+      $and: [{ endDate: { $gt: startDate } }, { startDate: { $lt: endDate } }],
+    });
+    if (dataReservations.length === 0) {
+      const newReservation = new Reservation({
+        apartmentId,
+        guestName,
+        guestEmail,
+        startDate,
+        endDate,
+        status,
+        paid,
+        // TODO: mensaje de Reserva realizada con éxito
+      });
+      await newReservation.save();
+      console.log("hecho!");
+      res.redirect("/");
+    } else {
+      console.log("No realizado");
+    }
+  } catch (err) {
+    res.status(500).render("error.ejs", {
+      message: "Error interno del servidor",
+      status: 404,
+    });
+  }
+
+  // -*-*-*
+});
 
 // /admin/apartment/1205 - Actualizar apartamento
 // /admin/apartment/1205/edit - Mostrar formulario de edición

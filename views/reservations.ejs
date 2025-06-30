@@ -17,12 +17,14 @@
                     </thead>
                     <tbody>
                         <% dataReservations.forEach(reservation=> { %>
-                            <tr>
+                            <tr class="<%= new Date(reservation.endDate) < new Date() ? 'table-secondary' : '' %>">
                                 <td><strong>
                                         <%= reservation.guestName %>
                                     </strong></td>
-                                <td><a
-                                        href="/apartments/<%= reservation.apartmentId %>"><code><%= reservation.apartmentId %></code></a>
+                                <td>
+                                    <a href="/apartments/<%= reservation.apartmentId %>">
+                                        <code><%= reservation.apartmentId %></code>
+                                    </a>
                                 </td>
                                 <td>
                                     <%= new Date(reservation.startDate).toLocaleDateString() %> –
