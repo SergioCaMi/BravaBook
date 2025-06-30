@@ -1,41 +1,18 @@
 <!-- Bootstrap JS Bundle (incluye Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap @5.3.3/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-
 <script>
-    // ********** ToolTips **********
-    document.addEventListener("DOMContentLoaded", function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-            new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    });
 
-    // ********** Función para añadir fotos **********
-    let photoCount = 0;
-    function addPhotoField() {
-        const container = document.getElementById('photosContainer');
-        const fieldset = document.createElement('fieldset');
-        fieldset.className = 'photo-fieldset';
-        fieldset.innerHTML = `
-            <legend>Foto ${photoCount + 1}</legend>
-            <label for="photos[${photoCount}][url]">URL de la foto:</label>
-            <input type="text" name="photos[${photoCount}][url]" required /><br>
-            <label for="photos[${photoCount}][description]">Descripción:</label>
-            <input type="text" name="photos[${photoCount}][description]" />
-            <label>
-                <input type="radio" name="mainPhotoIndex" value="${photoCount}" ${photoCount === 0 ? 'checked' : ''} />
-                Foto Principal
-            </label>
-            <hr />
-        `;
-        container.appendChild(fieldset);
-        photoCount++;
-    }
-
-    // ********** Función para añadir camas **********
     document.addEventListener("DOMContentLoaded", () => {
+        // ********** ToolTips **********
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        // ********** Función para añadir camas **********
+
         const roomsInput = document.getElementById("rooms");
         const bedsContainer = document.getElementById("bedsContainer");
 
@@ -45,7 +22,8 @@
         }
 
         function generateBedInputs() {
-            const roomCount = parseInt(roomsInput.value) || 0;
+            const roomCount = parseInt(document.getElementById("rooms").value) || 0;
+            const bedsContainer = document.getElementById("bedsContainer");
             bedsContainer.innerHTML = "";
 
             if (roomCount <= 0) return;
@@ -61,6 +39,7 @@
             for (let i = 0; i < roomCount; i++) {
                 const col = document.createElement("div");
                 col.className = "col-md-6";
+
                 const label = document.createElement("label");
                 label.setAttribute("for", `bedsPerRoom[${i}]`);
                 label.textContent = `Camas en habitación ${i + 1}`;
@@ -76,19 +55,48 @@
 
                 col.appendChild(label);
                 col.appendChild(input);
+
                 row.appendChild(col);
             }
 
             bedsContainer.appendChild(row);
         }
-
         roomsInput.addEventListener("input", generateBedInputs);
     });
 
+    // ********** Función para añadir imagenes **********
+    let photoCount = 0;
+
+    function addPhotoField() {
+        const container = document.getElementById('photosContainer');
+        const fieldset = document.createElement('fieldset');
+        fieldset.className = 'photo-fieldset';
+        fieldset.innerHTML = `
+      <legend>Foto ${photoCount + 1}</legend>
+
+      <label for="photos[${photoCount}][url]">URL de la foto:</label>
+      <input type="text" name="photos[${photoCount}][url]" required /><br>
+
+      <label for="photos[${photoCount}][description]">Descripción:</label>
+      <input type="text" name="photos[${photoCount}][description]" />
+
+      <label>
+        <input type="radio" name="mainPhotoIndex" value="${photoCount}" ${photoCount === 0 ? 'checked' : ''} />
+        Foto Principal
+      </label>
+
+      <hr />
+    `;
+        container.appendChild(fieldset);
+        photoCount++;
+    }
+
     // ********** Función para añadir normas **********
     let ruleCount = 0;
+
     function addRuleField() {
         const container = document.getElementById("rulesContainer");
+
         const group = document.createElement("div");
         group.className = "mb-2";
 
@@ -105,16 +113,20 @@
 
         group.appendChild(label);
         group.appendChild(input);
+
         container.appendChild(group);
+
         ruleCount++;
     }
 
     // ********** Provincias y Municipios **********
     const provinceSelect = document.getElementById('provinceSelect');
     const municipiSelect = document.getElementById('municipalitySelect');
+
     let provincias = [];
     let municipios = [];
 
+    // ********** Función para cargar datos JSON **********
     async function cargarDatos() {
         console.log("Cargando datos de ciudades y provincias...");
         try {
@@ -156,9 +168,9 @@
 
         if (filtered.length > 0) {
             municipiSelect.innerHTML = `
-                <option value="">-- Selecciona un municipio --</option>
-                ${filtered.map(m => `<option value="${m.nm}">${m.nm}</option>`).join('')}
-            `;
+      <option value="">-- Selecciona un municipio --</option>
+      ${filtered.map(m => `<option value="${m.nm}">${m.nm}</option>`).join('')} 
+    `;
         } else {
             municipiSelect.innerHTML = '<option value="">No hay municipios disponibles</option>';
         }
@@ -185,32 +197,34 @@
             municipalityHiddenInput.value = selectedMunicipalityText;
         }
     }
-
+    // Entrar en Reservas desde lista de apartamentos
     document.addEventListener("DOMContentLoaded", function () {
         const hash = window.location.hash;
+
         if (hash === "#reservation") {
             const reservationTab = new bootstrap.Tab(document.getElementById("reservation-tab"));
             reservationTab.show();
         }
+
+
     });
 
+    // Busco el id mediante el texto de la provincia
     provinceSelect.addEventListener("change", () => {
         const selectedText = provinceSelect.options[provinceSelect.selectedIndex].text;
         const selectedProvince = provincias.find(p => p.nm === selectedText);
+
         if (selectedProvince) {
             updateMunicipios(selectedProvince.id);
         } else {
             updateMunicipios(null);
         }
     });
-
     cargarDatos();
 </script>
-
 <button type="button" class="btn btn-primary d-flex align-items-center m-3" onclick="window.history.back()">
     <i class="bi bi-arrow-counterclockwise me-2"></i> Volver atrás
 </button>
-
 <footer class="bg-primary text-white">
     <div class="container py-5">
         <div class="row">
@@ -251,6 +265,7 @@
                     <li><a href="#" class="text-white text-decoration-none">Terms</a></li>
                 </ul>
             </div>
+
         </div>
     </div>
     <div class="bg-dark text-center py-3">
@@ -259,4 +274,8 @@
 </footer>
 
 </body>
+
+</html>
+</body>
+
 </html>
