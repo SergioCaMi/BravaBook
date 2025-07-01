@@ -62,3 +62,29 @@ export const getReservations = async (req, res) => {
     });
   }
 };
+
+
+// ******************** Listar apartamentos ********************
+// *** Mostramos todos los apartamentos ***
+export const getSearchApartment = async (req, res) => {
+  try {
+    const dataApartments = await Apartment.find({ active: true });
+    const renderData = getRenderObject(
+      "Inicio",
+      dataApartments,
+      [],
+      req,
+      null,
+      undefined,
+      "home"
+    );
+    console.log("desde GET / hasta home.ejs");
+    res.status(200).render("searchApartmens.ejs", renderData);
+  } catch (error) {
+    console.error("Error al obtener apartamentos:", error);
+    res.status(500).render("error.ejs", {
+      message: "Error interno del servidor",
+      status: 404,
+    });
+  }
+}

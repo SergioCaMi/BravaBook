@@ -23,7 +23,7 @@
                 <div class="position-absolute top-50 start-50 translate-middle w-100 px-3 form-overlay-responsive"
                     style="max-width: 800px; z-index: 10;">
                     <div class="bg-white p-4 rounded shadow-sm">
-                        <h4 class="mb-4 text-center">Filtrar apartamentos</h4>
+                        <h4 class="mb-4 text-center">Busca tu apartamento...</h4>
                         <form action="/apartments/search" method="GET" onsubmit="updateHiddenFields()">
                             <!-- *** Fila 1 *** -->
                             <div class="row g-3 mb-3">
@@ -42,19 +42,19 @@
                                 <input type="hidden" name="location[province]" id="provinceNameInput">
                                 <input type="hidden" name="location[city]" id="municipalityNameInput">
                                 <div class="col-md-4">
-                                    <label for="maxGuests" class="form-label">Capacidad máxima:</label>
+                                    <label for="maxGuests" class="form-label">Capacidad de huéspedes:</label>
                                     <input type="number" name="maxGuests" id="maxGuests" class="form-control" min="1">
                                 </div>
                             </div>
                             <!-- *** Fila 2 *** -->
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
-                                    <label for="minPrice" class="form-label">Precio mínimo (€):</label>
+                                    <label for="minPrice" class="form-label">Precio mínimo por noche (€):</label>
                                     <input type="number" name="minPrice" id="minPrice" class="form-control" min="0"
                                         step="0.01">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="maxPrice" class="form-label">Precio máximo (€):</label>
+                                    <label for="maxPrice" class="form-label">Precio máximo por noche (€):</label>
                                     <input type="number" name="maxPrice" id="maxPrice" class="form-control" min="0"
                                         step="0.01">
                                 </div>
@@ -128,6 +128,7 @@
                 </div>
             </div>
         </div>
+        <h2 class="text-center m-4">... o déjate llevar por nuestras recomendaciones!</h2>
     </div>
 
     <%- include("templates/seeApartments") %>

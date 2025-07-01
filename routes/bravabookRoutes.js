@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { getAllApartments, getAbout, getContact, getSearchApartment, getFilterApartments, getApartmentsById, postNewReservation } from '../controller/bravabookControllers.js';
+import { getAllApartments, getAbout, getContact, getFilterApartments, getApartmentsById, postNewReservation } from '../controller/bravabookControllers.js';
 
 // ****************************** Rutas ******************************
 // ******************** Home ********************
@@ -15,9 +15,6 @@ router.get("/about", getAbout);
 // *** Mostramos la pagina de Contacto ***
 router.get("/contact", getContact);
 
-// ******************** Listar apartamentos ********************
-// *** Mostramos todos los apartamentos ***
-router.get("/apartments", getSearchApartment);
 
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
@@ -31,12 +28,6 @@ router.get("/apartments/:id", getApartmentsById);
 // ********** Recibimos el formulario de la nueva reserva y la creamos en la BBDD **********
 router.post("/reservations/new-reservation", postNewReservation);
 
-// /admin/apartment/1205 - Actualizar apartamento
-// /admin/apartment/1205/edit - Mostrar formulario de edición
-// /admin/apartments
-
-// /apartment/1205 - Detalle del apartamento
-// /apartments - Todos los apartamentos
 
 // app.get('/recipes/:id', async (req, res) => {
 //     const { id } = req.params;

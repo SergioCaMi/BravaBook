@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { Apartment, Reservation } from "../models/bravabook.model.js";
 // *** Admin ***
-import { getAdminPanel, getNewApartment, getReservations } from '../controller/bravabookAdminControllers.js';
+import { getAdminPanel, getNewApartment, getReservations, getSearchApartment } from '../controller/bravabookAdminControllers.js';
 // *** Usuario ***
 // import { getAllApartments, getAbout, getContact, getReservations } from '../controller/bravabookControllers.js';
 
@@ -120,6 +120,10 @@ router.post("/apartment", async (req, res) => {
 // ********** Reservas **********
 // *** Mostramos todas las reservas ***
 router.get("/reservations", getReservations);
+
+// ******************** Listar apartamentos ********************
+// *** Mostramos todos los apartamentos ***
+router.get("/apartments", getSearchApartment);
 
 
 export default router;
