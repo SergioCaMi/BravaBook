@@ -1,5 +1,5 @@
 import { Apartment, Reservation } from "../models/bravabook.model.js";
-import { getRenderObject } from '../utils/getRender.js';
+import { getRenderObject } from "../utils/getRender.js";
 
 // // ********** Función para renderizar con todos los datos necesarios **********
 // export function getRenderObject(
@@ -86,7 +86,6 @@ export const getContact = (req, res) => {
   res.status(200).render("contactUs.ejs", renderData);
 };
 
-
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
 export const getFilterApartments = async (req, res) => {
@@ -106,10 +105,10 @@ export const getFilterApartments = async (req, res) => {
     "services.internet": internet,
   } = req.query;
 
-const province = req.query["location[province]"];
-const city = req.query["location[city]"];
+  const province = req.query["location[province]"];
+  const city = req.query["location[city]"];
 
-console.log("Provincia recibida:", province); 
+  console.log("Provincia recibida:", province);
 
   const query = {};
   query.active = true;
@@ -173,10 +172,32 @@ console.log("Provincia recibida:", province);
       query[`services.${key}`] = value;
     });
   }
+
+  // *** Fechas ***
+let reservedApartmentIds = [];
+
+if (req.query.startDate && req.query.endDate) {
+  const startDate = new Date(req.query.startDate);
+  const endDate = new Date(req.query.endDate);
+
+const ocupado = await Reservation.find({
+  apartmentId: { $exists: true },
+  startDate: { $lt: new Date(req.query.endDate) },
+  endDate: { $gte: new Date(req.query.startDate) }
+});
+  reservedApartmentIds = ocupado.map(r => r.apartmentId);
+}
+if (req.query.startDate && req.query.endDate) {
+  query._id = { $nin: reservedApartmentIds };
+}
+
   try {
     console.log("Query final:", query);
     const apartments = await Apartment.find(query);
     console.log("Resultados:", apartments.length);
+    if (apartments.length > 0) {
+      query._id = { $nin: reservedApartmentIds };
+    }
     const renderData = getRenderObject(
       apartments.title,
       apartments,
@@ -186,7 +207,7 @@ console.log("Provincia recibida:", province);
       undefined,
       "home"
     );
-    res.status(200).render("searchApartmens.ejs", renderData);
+    res.status(200).render("home.ejs", renderData);
 
     // res.json(apartments);
   } catch (error) {
