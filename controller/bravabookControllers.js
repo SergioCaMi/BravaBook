@@ -1,41 +1,39 @@
-import express from "express";
-const router = express.Router();
-import { Apartment, Reservation } from "../models/brababook.model.js";
+import { Apartment, Reservation } from "../models/bravabook.model.js";
+import { getRenderObject } from '../utils/getRender.js';
 
-// ********** Función para renderizar con todos los datos necesarios **********
-function getRenderObject(
-  title,
-  dataApartments = null,
-  dataReservations = null,
-  req = null,
-  user = null,
-  message,
-  currentPage
-) {
-  const userData =
-    user ||
-    (req.isAuthenticated?.() &&
-    req.user &&
-    req.user.photos &&
-    req.user.photos.length > 0
-      ? { photo: req.user.photos[0].value }
-      : null);
+// // ********** Función para renderizar con todos los datos necesarios **********
+// export function getRenderObject(
+//   title,
+//   dataApartments = null,
+//   dataReservations = null,
+//   req = null,
+//   user = null,
+//   message,
+//   currentPage
+// ) {
+//   const userData =
+//     user ||
+//     (req.isAuthenticated?.() &&
+//     req.user &&
+//     req.user.photos &&
+//     req.user.photos.length > 0
+//       ? { photo: req.user.photos[0].value }
+//       : null);
 
-  return {
-    title,
-    dataApartments,
-    dataReservations,
-    message,
-    user: userData,
-    currentPage,
-  };
-}
+//   return {
+//     title,
+//     dataApartments,
+//     dataReservations,
+//     message,
+//     user: userData,
+//     currentPage,
+//   };
+// }
 
 // ****************************** Rutas ******************************
-
 // ******************** Home ********************
 // *** Mostramos todos los apartamentos activos ***
-router.get("/", async (req, res) => {
+export const getAllApartments = async (req, res) => {
   try {
     const dataApartments = await Apartment.find({ active: true }).limit(12);
     const renderData = getRenderObject(
@@ -56,12 +54,11 @@ router.get("/", async (req, res) => {
       status: 404,
     });
   }
-});
+};
 
 // ******************** Endpoint de Acerca de... ********************
 // *** Mostramos la pagina de Acerca de... ***
-// TODO: gestionar quién puede entrar
-router.get("/about", (req, res) => {
+export const getAbout = (req, res) => {
   const renderData = getRenderObject(
     "Acerca de...",
     [],
@@ -72,12 +69,11 @@ router.get("/about", (req, res) => {
     "about"
   );
   res.status(200).render("aboutUs.ejs", renderData);
-});
+};
 
 // ******************** Endpoint de Contact ********************
 // *** Mostramos la pagina de Contacto ***
-// TODO: gestionar quién puede entrar
-router.get("/contact", (req, res) => {
+export const getContact = (req, res) => {
   const renderData = getRenderObject(
     "Contacta con nosotros",
     [],
@@ -88,145 +84,13 @@ router.get("/contact", (req, res) => {
     "contact"
   );
   res.status(200).render("contactUs.ejs", renderData);
-});
+};
 
-// ******************** Endpoint de Admnin ********************
-// *** Mostramos la pagina de administradores ***
-// TODO: gestionar quién puede entrar
-router.get("/admin", (req, res) => {
-  const renderData = getRenderObject(
-    "Administrador",
-    [],
-    [],
-    req,
-    null,
-    undefined,
-    "admin"
-  );
-  res.status(200).render("adminApartment.ejs", renderData);
-});
 
-// ******************** Añadir nuevo apartamento ********************
-// ******************** Formulario para añadir nuevo apartamento ********************
-// *** Mostramos El formulario para añadir un nuevo apartamento ***
-router.get("/admin/apartment/new", async (req, res) => {
-  const renderData = getRenderObject(
-    "Añadir nuevo apartamento",
-    [],
-    [],
-    req,
-    null,
-    undefined,
-    "admin"
-  );
-  console.log("addApartment.ejs");
-  console.log("desde GET /admin/apartment/new hasta addApartment.ejs");
-
-  res.status(200).render("addApartment.ejs", renderData);
-});
-
-// ******************** Recuperamos datos del nuevo apartamento ********************
-// *** Procesamos los datos del nuevo apartamento y lo guardamos en la BBDD ***
-router.post("/admin/apartment", async (req, res) => {
-  console.log(req.body);
-  try {
-    const {
-      title,
-      description,
-      rooms,
-      bathrooms,
-      price,
-      maxGuests,
-      squareMeters,
-    } = req.body;
-
-    // *** Normas ***
-    const rules = Array.isArray(req.body.rules)
-      ? req.body.rules.map((r) => r.trim()).filter((r) => r.length > 0)
-      : [];
-
-    // *** Fotos ***
-    const photos = Array.isArray(req.body.photos)
-      ? req.body.photos
-          .filter((photo) => photo.url?.trim())
-          .map((photo, index) => ({
-            ...photo,
-            url: photo.url.trim(),
-            description: photo.description || "",
-            isMain: String(index) === String(req.body.mainPhotoIndex),
-          }))
-      : [];
-
-    //  *** Servicios ***
-    // existe el servicio? es igual a 'on'? true/false
-    const services = {
-      airConditioning: req.body.services?.airConditioning === "on",
-      heating: req.body.services?.heating === "on",
-      accessibility: req.body.services?.accessibility === "on",
-      television: req.body.services?.television === "on",
-      kitchen: req.body.services?.kitchen === "on",
-      internet: req.body.services?.internet === "on",
-    };
-
-    //  *** Localización ***
-    const location = {
-      province: req.body.location?.province || "No especificado",
-      city: req.body.location?.city || "No especificado",
-      gpsCoordinates: {
-        lat: req.body.location?.gpsCoordinates?.lat
-          ? Number(req.body.location.gpsCoordinates.lat)
-          : 0,
-        lng: req.body.location?.gpsCoordinates?.lng
-          ? Number(req.body.location.gpsCoordinates.lng)
-          : 0,
-      },
-    };
-
-    //  *** Camas por habitación ***
-    let bedsPerRoom = [];
-    if (Array.isArray(req.body.bedsPerRoom)) {
-      bedsPerRoom = req.body.bedsPerRoom
-        .map((num) => parseInt(num, 10))
-        .filter((num) => !isNaN(num) && num >= 0);
-    }
-
-    // *** Crear la nueva instancia ***
-    const newApartment = new Apartment({
-      title,
-      description,
-      rules,
-      rooms: Number(rooms),
-      bedsPerRoom,
-      bathrooms: Number(bathrooms),
-      photos,
-      price: Number(price),
-      maxGuests: Number(maxGuests),
-      squareMeters: Number(squareMeters),
-      services,
-      location,
-      active: true,
-    });
-
-    await newApartment.save();
-    console.log("desde POST /admin/apartment hasta home.ejs");
-    const renderData = getRenderObject(
-      "",
-      [],
-      [],
-      req,
-      null,
-      undefined,
-      "admin"
-    );
-    res.status(200).render("adminApartment.ejs", renderData);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-});
 
 // ******************** Listar apartamentos ********************
 // *** Mostramos todos los apartamentos ***
-router.get("/apartments", async (req, res) => {
+export const getSearchApartment = async (req, res) => {
   try {
     const dataApartments = await Apartment.find({ active: true });
     const renderData = getRenderObject(
@@ -247,36 +111,12 @@ router.get("/apartments", async (req, res) => {
       status: 404,
     });
   }
-});
+}
 
-// ********** Reservas **********
-// *** Mostramos todas las reservas ***
-router.get("/reservations", async (req, res) => {
-  try {
-    const dataReservations = await Reservation.find().sort("startDate");
-    const renderData = getRenderObject(
-      "Inicio",
-      [],
-      dataReservations,
-      req,
-      null,
-      undefined,
-      "home"
-    );
-    console.log("desde GET / hasta home.ejs");
-    res.status(200).render("reservations.ejs", renderData);
-  } catch (error) {
-    console.error("Error al obtener apartamentos:", error);
-    res.status(500).render("error.ejs", {
-      message: "Error interno del servidor",
-      status: 404,
-    });
-  }
-});
 
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
-router.get("/apartments/search", async (req, res) => {
+export const getFilterApartments = async (req, res) => {
   console.log(req.query);
   const {
     minPrice,
@@ -383,11 +223,11 @@ console.log("Provincia recibida:", province);
       status: 404,
     });
   }
-});
+};
 
 // ********** Detalle del apartamento por :id **********
 // *** Mostramos datos de un apartamento en partícular con un :id ***
-router.get("/apartments/:id", async (req, res) => {
+export const getApartmentsById = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -412,10 +252,11 @@ router.get("/apartments/:id", async (req, res) => {
       status: 404,
     });
   }
-});
+};
 
 // ********** Reservas nuevas **********
-router.post("/reservations/new-reservation", async (req, res) => {
+// ********** Recibimos el formulario de la nueva reserva y la creamos en la BBDD **********
+export const postNewReservation = async (req, res) => {
   const { apartmentId, guestName, guestEmail } = req.body;
   const startDate = new Date(req.body.startDate);
   const endDate = new Date(req.body.endDate);
@@ -455,49 +296,4 @@ router.post("/reservations/new-reservation", async (req, res) => {
       status: 404,
     });
   }
-
-  // -*-*-*
-});
-
-// /admin/apartment/1205 - Actualizar apartamento
-// /admin/apartment/1205/edit - Mostrar formulario de edición
-// /admin/apartments
-
-// /apartment/1205 - Detalle del apartamento
-// /apartments - Todos los apartamentos
-
-// app.get('/recipes/:id', async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//             const recipes = await Recipe.find({ _id: id });
-//             res.status(200).json({ recipes });
-
-//     }   catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
-// app.put('/recipes/:id', async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//             const recipes = await Recipe.findByIdAndUpdate(id, req.body, { new: true });
-//             res.status(200).json({ recipes });
-
-//     }   catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
-// app.delete('/recipes/:id', async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//             const recipes = await Recipe.findByIdAndDelete(id);
-//             res.status(200).json({ recipes });
-
-//     }   catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-
-// ********** Exportar el router **********
-export default router;
+};

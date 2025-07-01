@@ -73,8 +73,11 @@ import { connectDB } from "./config/db.js";
 await connectDB().catch((err) => console.log(err));
 
 // ********** Rutas modularizadas **********
-const brababookRoutes = (await import("./routes/brababookRoutes.js")).default;
-app.use("/", brababookRoutes);
+const bravabookRoutes = (await import("./routes/bravabookRoutes.js")).default;
+app.use("/", bravabookRoutes);
+
+const bravabookAdminRoutes = (await import("./routes/bravabookAdminRoutes.js")).default;
+app.use("/admin", bravabookAdminRoutes);
 
 // ****************************** Iniciar servidor ****************************************
 app.listen(PORT, () => {
