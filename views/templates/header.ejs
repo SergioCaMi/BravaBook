@@ -33,22 +33,28 @@
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav align-items-center">
         <li class="nav-item">
-          <a class="nav-link <%= currentPage === 'home' ? 'active' : '' %>" aria-current="page" href="/">Inicio</a>
+          <a class="nav-link <%= rol === 'home' ? 'active' : '' %>" aria-current="page" href="/">Inicio</a>
         </li>
         <!-- <li class="nav-item">
-          <a class="nav-link <%= currentPage === 'booking' ? 'active' : '' %>"
+          <a class="nav-link <%= rol === 'booking' ? 'active' : '' %>"
             href="/apartment/new-reservation">Reservas</a>
         </li> -->
 
         <li class="nav-item">
-          <a class="nav-link <%= currentPage === 'about' ? 'active' : '' %>" href="/about">Acerca</a>
+          <a class="nav-link <%= rol === 'about' ? 'active' : '' %>" href="/about">Acerca</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%= currentPage === 'contact' ? 'active' : '' %>" href="/contact">Contacto</a>
+          <a class="nav-link <%= rol === 'contact' ? 'active' : '' %>" href="/contact">Contacto</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%= currentPage === 'admin' ? 'active' : '' %>" href="/admin">Administrador</a>
+          <a class="nav-link <%= rol === 'admin' ? 'active' : '' %>" href="/admin">Administrador</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link <%= rol === 'admin' ? 'active' : '' %>" href="#">
+            <%= rol %>
+          </a>
+        </li>
+
         <li class="nav-item d-flex gap-2">
           <a class="btn btn-outline-light btn-sm" href="#">SignIn</a>
           <a class="btn btn-outline-light btn-sm" href="#">LogIn</a>

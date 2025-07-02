@@ -12,9 +12,11 @@ export const getAdminPanel = (req, res) => {
     req,
     null,
     undefined,
+    1,
     "admin"
   );
-  res.status(200).render("adminApartment.ejs", renderData);
+  console.log("ROL:", renderData.currentPage);
+    res.status(200).render("adminApartment.ejs", renderData);
 };
 
 // ******************** Formulario para añadir nuevo apartamento ********************
@@ -27,8 +29,10 @@ export const getNewApartment = async (req, res) => {
     req,
     null,
     undefined,
+    1,
     "admin"
   );
+    console.log("ROL:", renderData.currentPage);
   console.log("addApartment.ejs");
   console.log("desde GET /admin/apartment/new hasta addApartment.ejs");
 
@@ -126,6 +130,7 @@ export const postNewApartment = async (req, res) => {
       req,
       null,
       undefined,
+      1,
       "admin"
     );
     res.status(200).render("adminApartment.ejs", renderData);
@@ -146,8 +151,10 @@ export const getReservations = async (req, res) => {
       req,
       null,
       undefined,
-      "home"
+      1,
+      "admin"
     );
+      console.log("ROL:", renderData.currentPage);
     console.log("desde GET / hasta home.ejs");
     res.status(200).render("reservations.ejs", renderData);
   } catch (error) {
@@ -171,11 +178,13 @@ export const getAllApartments = async (req, res) => {
       req,
       null,
       undefined,
-      "home"
+      1,
+      "admin"
     );
+      console.log("ROL:", renderData.currentPage);
     console.log("desde GET / hasta home.ejs");
     const pagination = await getPaginatedData(Apartment,{  }, req, 6 );
-    res.status(200).render("searchApartmens.ejs", { ...renderData, ...pagination });
+    res.status(200).render("home.ejs", { ...renderData, ...pagination });
   } catch (error) {
     console.error("Error al obtener apartamentos:", error);
     res.status(500).render("error.ejs", {
@@ -203,8 +212,11 @@ export const getAdminEdit = async (req, res) => {
       req,
       null,
       undefined,
+      1,
       "admin"
     );
+      console.log("ROL:", renderData.currentPage);
+
     res.status(200).render("editApartment.ejs", renderData);
   } catch (err) {
     res.status(500).render("error.ejs", {

@@ -6,7 +6,8 @@ export function getRenderObject(
   req = null,
   user = null,
   message,
-  currentPage
+  currentPage,
+  rol
 ) {
   const userData =
     user ||
@@ -24,6 +25,7 @@ export function getRenderObject(
     message,
     user: userData,
     currentPage,
+    rol
   };
 }
 

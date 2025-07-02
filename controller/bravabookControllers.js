@@ -44,6 +44,7 @@ export const getAllApartments = async (req, res) => {
       req,
       null,
       undefined,
+      1,
       "home"
     );
     console.log("desde GET / hasta home.ejs");
@@ -67,6 +68,7 @@ export const getAbout = (req, res) => {
     req,
     null,
     undefined,
+    1,
     "about"
   );
   res.status(200).render("aboutUs.ejs", renderData);
@@ -82,6 +84,7 @@ export const getContact = (req, res) => {
     req,
     null,
     undefined,
+    1,
     "contact"
   );
   res.status(200).render("contactUs.ejs", renderData);
@@ -89,7 +92,7 @@ export const getContact = (req, res) => {
 
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
-export const getFilterApartments = async (req, res) => {
+export const getSearchApartments = async (req, res) => {
   console.log(req.query);
   const {
     minPrice,
@@ -104,6 +107,7 @@ export const getFilterApartments = async (req, res) => {
     "services.television": television,
     "services.kitchen": kitchen,
     "services.internet": internet,
+    rol
   } = req.query;
 
   const province = req.query["location[province]"];
@@ -173,7 +177,6 @@ export const getFilterApartments = async (req, res) => {
       query[`services.${key}`] = value;
     });
   }
-
   // *** Fechas ***
   let reservedApartmentIds = [];
 
@@ -217,7 +220,8 @@ export const getFilterApartments = async (req, res) => {
       req,
       null,
       undefined,
-      "home"
+      1,
+      rol
     );
     res.status(200).render("home.ejs", renderData);
 
@@ -249,6 +253,7 @@ export const getApartmentsById = async (req, res) => {
       req,
       null,
       undefined,
+      1,
       "home"
     );
     res.status(200).render("detailApartment.ejs", renderData);

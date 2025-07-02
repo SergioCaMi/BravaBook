@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { getAllApartments, getAbout, getContact, getFilterApartments, getApartmentsById, postNewReservation } from '../controller/bravabookControllers.js';
+import { getAllApartments, getAbout, getContact, getSearchApartments, getApartmentsById, postNewReservation } from '../controller/bravabookControllers.js';
 
 // ****************************** Rutas ******************************
 // ******************** Home ********************
@@ -18,7 +18,7 @@ router.get("/contact", getContact);
 
 // ********** Buscar apartamento con filtros **********
 // *** Devuelve los apartamentos que cumplen los requisitos que recibe ***
-router.get("/apartments/search", getFilterApartments);
+router.get("/apartments/search", getSearchApartments);
 
 // ********** Detalle del apartamento por :id **********
 // *** Mostramos datos de un apartamento en partícular con un :id ***
