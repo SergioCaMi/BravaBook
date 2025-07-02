@@ -70,14 +70,15 @@
                                     </p>
                                 </div>
                                 <div class="mt-3 d-flex gap-2 flex-wrap">
-                                    <a href="/apartments/<%= apartment._id %>"
-                                        class="btn btn-outline-primary btn-sm">Ver detalles</a>
                                     <% if (rol==='admin' ) { %>
                                         <a href="/admin/apartments/<%= apartment._id %>/edit"
-                                            class="btn btn-outline-primary btn-sm">Editar</a>
+                                            class="btn btn-danger btn-sm w-50">Editar</a>
                                         <% } else { %>
+                                            <a href="/apartments/<%= apartment._id %>"
+                                                class="btn btn-primary btn-sm">Ver detalles</a>
+
                                             <a href="/apartments/<%= apartment._id %>#reservation"
-                                                class="btn btn-outline-primary btn-sm ">Reservar</a>
+                                                class="btn btn-primary btn-sm ">Reservar</a>
                                             <% } %>
                                 </div>
                             </div>

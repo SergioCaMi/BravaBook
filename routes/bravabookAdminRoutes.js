@@ -29,7 +29,7 @@ router.get("/apartments/:id/edit", getAdminEdit);
 
 // ******************** Recuperamos datos del apartamento para editarlo ********************
 // *** Procesamos los datos del apartamento y lo actualizamos en la BBDD ***
-router.get("/apartment/:id/edit/save", putAdminEdit);
+router.post("/apartment/:id/edit/save", putAdminEdit);
 
 
 // ********** Reservas **********

@@ -31,194 +31,189 @@
 
                         <% if (rol==='admin' ) { %>
                             <!-- ********** Formulario Admin  ********** -->
-                             <!-- Formulario sin modificar el div container, pero sin posición absoluta, centrado en su contenedor. -->
-                              <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 60vh;">
-        <div class="bg-white p-4 rounded shadow-sm w-100" style="max-width: 800px;">
-            <h4 class="mb-4 text-center">Panel de Administración</h4>
-           <form action="/apartments/search" method="GET" onsubmit="updateHiddenFields()">
-                                            <% } else { %>
-                                                <!-- ********** Formulario Usuario Normal ********** -->
-                                                <div class="position-absolute top-50 start-50 translate-middle w-100  form-overlay-responsive"
-                                                    style="max-width: 800px; z-index: 10;">
-                                                    <div class="bg-white p-4 rounded shadow-sm">
-                                                        <h4 class="mb-4 text-center">Busca tu apartamento...</h4>
-                                                        <form action="/apartments/search" method="GET"
-                                                            onsubmit="updateHiddenFields()">
-                                                            <% } %>
-                                                                <input type="hidden" name="rol" value="<%= rol %>">
-                                                                <!-- *** Fila 1 *** -->
-                                                                <div class="row g-3 mb-3">
-                                                                    <div class="col-md-4">
-                                                                        <label for="provinceSelect"
-                                                                            class="form-label">Selecciona una
-                                                                            provincia:</label>
-                                                                        <select id="provinceSelect"
-                                                                            class="form-control form-select mb-3">
-                                                                            <option value="">-- Selecciona una provincia
-                                                                                --</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-md-4">
-                                                                        <label for="municipalitySelect"
-                                                                            class="form-label">Selecciona un
-                                                                            municipio:</label>
-                                                                        <select id="municipalitySelect"
-                                                                            class="form-control form-select">
-                                                                            <option value="">-- Selecciona un municipio
-                                                                                --</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <input type="hidden" name="location[province]"
-                                                                        id="provinceNameInput">
-                                                                    <input type="hidden" name="location[city]"
-                                                                        id="municipalityNameInput">
-                                                                    <div class="col-md-4">
-                                                                        <label for="maxGuests"
-                                                                            class="form-label">Capacidad
-                                                                            de
-                                                                            huéspedes:</label>
-                                                                        <input type="number" name="maxGuests"
-                                                                            id="maxGuests" class="form-control" min="1">
-                                                                    </div>
+                            <!-- Formulario sin modificar el div container, pero sin posición absoluta, centrado en su contenedor. -->
+                            <div class="d-flex justify-content-center align-items-center w-100"
+                                style="min-height: 60vh;">
+                                <div class="bg-white p-4 rounded shadow-sm w-100" style="max-width: 800px;">
+                                    <h4 class="mb-4 text-center">Panel de Administración</h4>
+                                    <form action="/apartments/search" method="GET" onsubmit="updateHiddenFields()">
+                                        <% } else { %>
+                                            <!-- ********** Formulario Usuario Normal ********** -->
+                                            <div class="position-absolute top-50 start-50 translate-middle w-100  form-overlay-responsive"
+                                                style="max-width: 800px; z-index: 10;">
+                                                <div class="bg-white p-4 rounded shadow-sm">
+                                                    <h4 class="mb-4 text-center">Busca tu apartamento...</h4>
+                                                    <form action="/apartments/search" method="GET"
+                                                        onsubmit="updateHiddenFields()">
+                                                        <% } %>
+                                                            <input type="hidden" name="rol" value="<%= rol %>">
+                                                            <!-- *** Fila 1 *** -->
+                                                            <div class="row g-3 mb-3">
+                                                                <div class="col-md-4">
+                                                                    <label for="provinceSelect"
+                                                                        class="form-label">Selecciona una
+                                                                        provincia:</label>
+                                                                    <select id="provinceSelect"
+                                                                        class="form-control form-select mb-3">
+                                                                        <option value="">-- Selecciona una provincia
+                                                                            --</option>
+                                                                    </select>
                                                                 </div>
-                                                                <!-- *** Fila 2 *** -->
-                                                                <div class="row g-3 mb-4">
-                                                                    <div class="col-md-6">
-                                                                        <label for="minPrice" class="form-label">Precio
-                                                                            mínimo por noche
-                                                                            (€):</label>
-                                                                        <input type="number" name="minPrice"
-                                                                            id="minPrice" class="form-control" min="0"
-                                                                            step="0.01">
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <label for="maxPrice" class="form-label">Precio
-                                                                            máximo por noche
-                                                                            (€):</label>
-                                                                        <input type="number" name="maxPrice"
-                                                                            id="maxPrice" class="form-control" min="0"
-                                                                            step="0.01">
-                                                                    </div>
+                                                                <div class="col-md-4">
+                                                                    <label for="municipalitySelect"
+                                                                        class="form-label">Selecciona un
+                                                                        municipio:</label>
+                                                                    <select id="municipalitySelect"
+                                                                        class="form-control form-select">
+                                                                        <option value="">-- Selecciona un municipio
+                                                                            --</option>
+                                                                    </select>
                                                                 </div>
-                                                                <!-- *** Fila 3 *** -->
-                                                                <div class="row g-3 mb-4">
-                                                                    <div class="col-md-6">
-                                                                        <label for="startDate" class="form-label">Fecha
-                                                                            de
-                                                                            entrada:</label>
-                                                                        <input type="date" name="startDate"
-                                                                            id="startDate" class="form-control">
-                                                                        <div class="form-text">Ejemplo: 2025-04-10</div>
-                                                                    </div>
-
-                                                                    <div class="col-md-6">
-                                                                        <label for="endDate" class="form-label">Fecha de
-                                                                            salida:</label>
-                                                                        <input type="date" name="endDate" id="endDate"
-                                                                            class="form-control">
-                                                                        <div class="form-text">Ejemplo: 2025-04-17</div>
-                                                                    </div>
+                                                                <input type="hidden" name="location[province]"
+                                                                    id="provinceNameInput">
+                                                                <input type="hidden" name="location[city]"
+                                                                    id="municipalityNameInput">
+                                                                <div class="col-md-4">
+                                                                    <label for="maxGuests" class="form-label">Capacidad
+                                                                        de
+                                                                        huéspedes:</label>
+                                                                    <input type="number" name="maxGuests" id="maxGuests"
+                                                                        class="form-control" min="1">
                                                                 </div>
-                                                                <!-- *** Fila 4 *** -->
-                                                                <div class="mb-4">
-                                                                    <label class="form-label">Servicios:</label>
-                                                                    <div class="row g-2">
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    name="services.airConditioning"
-                                                                                    value="on" class="form-check-input"
-                                                                                    id="airConditioning">
-                                                                                <label class="form-check-label"
-                                                                                    for="airConditioning">
-                                                                                    <i
-                                                                                        class="bi bi-snow text-black me-1"></i>Aire
-                                                                                    Acondicionado
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    name="services.heating" value="on"
-                                                                                    class="form-check-input"
-                                                                                    id="heating">
-                                                                                <label class="form-check-label"
-                                                                                    for="heating">
-                                                                                    <i
-                                                                                        class="bi bi-fire text-black me-1"></i>Calefacción
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    name="services.accessibility"
-                                                                                    value="on" class="form-check-input"
-                                                                                    id="accessibility">
-                                                                                <label class="form-check-label"
-                                                                                    for="accessibility">
-                                                                                    <i
-                                                                                        class="bi bi-person-wheelchair text-black me-1"></i>Accesibilidad
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    name="services.television"
-                                                                                    value="on" class="form-check-input"
-                                                                                    id="television">
-                                                                                <label class="form-check-label"
-                                                                                    for="television">
-                                                                                    <i
-                                                                                        class="bi bi-tv text-black me-1"></i>Televisión
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    name="services.kitchen" value="on"
-                                                                                    class="form-check-input"
-                                                                                    id="kitchen">
-                                                                                <label class="form-check-label"
-                                                                                    for="kitchen">
-                                                                                    <i
-                                                                                        class="bi bi-cup-hot text-black me-1"></i>Cocina
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox"
-                                                                                    name="services.internet" value="on"
-                                                                                    class="form-check-input"
-                                                                                    id="internet">
-                                                                                <label class="form-check-label"
-                                                                                    for="internet">
-                                                                                    <i
-                                                                                        class="bi bi-wifi text-black me-1"></i>Internet
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                            </div>
+                                                            <!-- *** Fila 2 *** -->
+                                                            <div class="row g-3 mb-4">
+                                                                <div class="col-md-6">
+                                                                    <label for="minPrice" class="form-label">Precio
+                                                                        mínimo por noche
+                                                                        (€):</label>
+                                                                    <input type="number" name="minPrice" id="minPrice"
+                                                                        class="form-control" min="0" step="0.01">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="maxPrice" class="form-label">Precio
+                                                                        máximo por noche
+                                                                        (€):</label>
+                                                                    <input type="number" name="maxPrice" id="maxPrice"
+                                                                        class="form-control" min="0" step="0.01">
+                                                                </div>
+                                                            </div>
+                                                            <!-- *** Fila 3 *** -->
+                                                            <div class="row g-3 mb-4">
+                                                                <div class="col-md-6">
+                                                                    <label for="startDate" class="form-label">Fecha
+                                                                        de
+                                                                        entrada:</label>
+                                                                    <input type="date" name="startDate" id="startDate"
+                                                                        class="form-control">
+                                                                    <div class="form-text">Ejemplo: 2025-04-10</div>
                                                                 </div>
 
-                                                                <div class="d-grid">
-                                                                    <button type="submit" class="btn btn-primary">Buscar
-                                                                        apartamentos</button>
+                                                                <div class="col-md-6">
+                                                                    <label for="endDate" class="form-label">Fecha de
+                                                                        salida:</label>
+                                                                    <input type="date" name="endDate" id="endDate"
+                                                                        class="form-control">
+                                                                    <div class="form-text">Ejemplo: 2025-04-17</div>
                                                                 </div>
-                                                        </form>
-                                                    </div>
+                                                            </div>
+                                                            <!-- *** Fila 4 *** -->
+                                                            <div class="mb-4">
+                                                                <label class="form-label">Servicios:</label>
+                                                                <div class="row g-2">
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox"
+                                                                                name="services.airConditioning"
+                                                                                value="on" class="form-check-input"
+                                                                                id="airConditioning">
+                                                                            <label class="form-check-label"
+                                                                                for="airConditioning">
+                                                                                <i
+                                                                                    class="bi bi-snow text-black me-1"></i>Aire
+                                                                                Acondicionado
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox"
+                                                                                name="services.heating" value="on"
+                                                                                class="form-check-input" id="heating">
+                                                                            <label class="form-check-label"
+                                                                                for="heating">
+                                                                                <i
+                                                                                    class="bi bi-fire text-black me-1"></i>Calefacción
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox"
+                                                                                name="services.accessibility" value="on"
+                                                                                class="form-check-input"
+                                                                                id="accessibility">
+                                                                            <label class="form-check-label"
+                                                                                for="accessibility">
+                                                                                <i
+                                                                                    class="bi bi-person-wheelchair text-black me-1"></i>Accesibilidad
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox"
+                                                                                name="services.television" value="on"
+                                                                                class="form-check-input"
+                                                                                id="television">
+                                                                            <label class="form-check-label"
+                                                                                for="television">
+                                                                                <i
+                                                                                    class="bi bi-tv text-black me-1"></i>Televisión
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox"
+                                                                                name="services.kitchen" value="on"
+                                                                                class="form-check-input" id="kitchen">
+                                                                            <label class="form-check-label"
+                                                                                for="kitchen">
+                                                                                <i
+                                                                                    class="bi bi-cup-hot text-black me-1"></i>Cocina
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <div class="form-check">
+                                                                            <input type="checkbox"
+                                                                                name="services.internet" value="on"
+                                                                                class="form-check-input" id="internet">
+                                                                            <label class="form-check-label"
+                                                                                for="internet">
+                                                                                <i
+                                                                                    class="bi bi-wifi text-black me-1"></i>Internet
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="d-grid">
+                                                                <button type="submit" class="btn btn-primary">Buscar
+                                                                    apartamentos</button>
+                                                            </div>
+                                                    </form>
                                                 </div>
-                                    </div>
+                                            </div>
                                 </div>
-                                <% if (rol !='admin' ) { %>
-                                    <h2 class="text-center m-4">... o déjate llevar por nuestras recomendaciones!</h2>
-                                    <% } %>
                             </div>
+                            <% if (rol !='admin' ) { %>
+                                <h2 class="text-center m-4">... o déjate llevar por nuestras recomendaciones!</h2>
+                                <% } %>
+            </div>
 
-                            <%- include("templates/seeApartments") %>
+            <%- include("templates/seeApartments") %>
 
-                                <%- include("templates/footer") %>
+                <%- include("templates/footer") %>
