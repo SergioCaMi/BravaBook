@@ -174,22 +174,33 @@ export const getFilterApartments = async (req, res) => {
   }
 
   // *** Fechas ***
-let reservedApartmentIds = [];
+  let reservedApartmentIds = [];
 
-if (req.query.startDate && req.query.endDate) {
-  const startDate = new Date(req.query.startDate);
-  const endDate = new Date(req.query.endDate);
+  if (req.query.startDate && req.query.endDate) {
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
+    const normalizedStart = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate()
+    );
+    const normalizedEnd = new Date(
+      endDate.getFullYear(),
+      endDate.getMonth(),
+      endDate.getDate()
+    );
+    const ocupados = await Reservation.find({
+      apartmentId: { $exists: true },
+      startDate: { $lt: endDate },
+      endDate: { $gt: startDate },
+    });
 
-const ocupado = await Reservation.find({
-  apartmentId: { $exists: true },
-  startDate: { $lt: new Date(req.query.endDate) },
-  endDate: { $gte: new Date(req.query.startDate) }
-});
-  reservedApartmentIds = ocupado.map(r => r.apartmentId);
-}
-if (req.query.startDate && req.query.endDate) {
-  query._id = { $nin: reservedApartmentIds };
-}
+    reservedApartmentIds = ocupados.map((r) => r.apartmentId);
+  }
+
+  if (req.query.startDate && req.query.endDate) {
+    query._id = { $nin: reservedApartmentIds };
+  }
 
   try {
     console.log("Query final:", query);

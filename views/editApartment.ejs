@@ -1,0 +1,240 @@
+<%- include("templates/header", { title: title }) %>
+
+    <div class="container my-5 pt-5 mt-5">
+        <h2 class="mb-4 text-center">Editar Apartamento</h2>
+
+        <% if (dataApartments) { %>
+            <% const apartment=dataApartments; %>
+
+                <form action="/admin/apartment/<%= apartment._id %>/edit/save" method="POST"
+                    class="card shadow-sm p-4 mb-5 needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Título</label>
+                        <input type="text" name="title" id="title" class="form-control" value="<%= apartment.title %>"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descripción</label>
+                        <textarea name="description" id="description" rows="4" class="form-control"
+                            required><%= apartment.description %></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Normas</label>
+                        <div id="rulesContainer">
+                            <% if (apartment.rules && apartment.rules.length> 0) { %>
+                                <% apartment.rules.forEach(function(rule) { %>
+                                    <div class="input-group mb-2">
+                                        <input type="text" name="rules[]" class="form-control" value="<%= rule %>"
+                                            required>
+                                        <button type="button" class="btn btn-outline-danger"
+                                            onclick="this.parentNode.remove()">Eliminar</button>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <input type="text" name="rules[]" class="form-control mb-2"
+                                                placeholder="Ej. No fumar" required>
+                                            <% } %>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-success mt-2" onclick="addRuleInput()">+
+                            Añadir norma</button>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fotos</label>
+                        <div id="photosContainer">
+                            <% if (apartment.photos && apartment.photos.length> 0) { %>
+                                <% apartment.photos.forEach(function(photo, index) { %>
+                                    <div class="row g-2 align-items-center mb-2">
+                                        <div class="col-md-8">
+                                            <input type="text" name="photos[<%= index %>][url]" class="form-control"
+                                                value="<%= photo.url %>" placeholder="URL de la foto" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" name="photos[<%= index %>][description]"
+                                                class="form-control" value="<%= photo.description || '' %>"
+                                                placeholder="Descripción">
+                                        </div>
+                                        <div class="col-md-1 d-flex align-items-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="mainPhotoIndex"
+                                                    value="<%= index %>" <%=photo.isMain ? 'checked' : '' %>>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <div class="row g-2 align-items-center mb-2">
+                                                <div class="col-md-8">
+                                                    <input type="text" name="photos[0][url]" class="form-control"
+                                                        placeholder="URL de la foto" required>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="text" name="photos[0][description]"
+                                                        class="form-control" placeholder="Descripción">
+                                                </div>
+                                                <div class="col-md-1 d-flex align-items-center">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="mainPhotoIndex" value="0" checked>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-success mt-2" onclick="addPhotoFields()">+
+                            Añadir foto</button>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label for="rooms" class="form-label">Habitaciones</label>
+                            <input type="number" name="rooms" id="rooms" class="form-control"
+                                value="<%= apartment.rooms %>" min="1" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="bathrooms" class="form-label">Baños</label>
+                            <input type="number" name="bathrooms" id="bathrooms" class="form-control"
+                                value="<%= apartment.bathrooms %>" min="1" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="maxGuests" class="form-label">Huéspedes máximos</label>
+                            <input type="number" name="maxGuests" id="maxGuests" class="form-control"
+                                value="<%= apartment.maxGuests %>" min="1" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="squareMeters" class="form-label">M²</label>
+                            <input type="number" name="squareMeters" id="squareMeters" class="form-control"
+                                value="<%= apartment.squareMeters %>" min="10" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Camas por habitación</label>
+                        <div id="bedsPerRoomContainer">
+                            <% if (apartment.bedsPerRoom && apartment.bedsPerRoom.length> 0) { %>
+                                <% apartment.bedsPerRoom.forEach(function(bedCount, index) { %>
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">Habitación <%= index + 1 %></span>
+                                        <input type="number" name="bedsPerRoom[]" class="form-control"
+                                            value="<%= bedCount %>" min="1" required>
+                                        <button type="button" class="btn btn-outline-danger"
+                                            onclick="this.parentNode.remove()">Eliminar</button>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">Habitación 1</span>
+                                                <input type="number" name="bedsPerRoom[]" class="form-control" value="2"
+                                                    min="1" required>
+                                            </div>
+                                            <% } %>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-success mt-2" onclick="addBedroomField()">+
+                            Añadir habitación</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Precio por noche</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text">€</span>
+                            <input type="number" name="price" id="price" class="form-control"
+                                value="<%= apartment.price %>" min="1" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="city" class="form-label">Ciudad</label>
+                            <input type="text" name="location.city" id="city" class="form-control"
+                                value="<%= apartment.location.city %>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="province" class="form-label">Provincia</label>
+                            <input type="text" name="location.province" id="province" class="form-control"
+                                value="<%= apartment.location.province %>" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="lat" class="form-label">Latitud</label>
+                            <input type="number" name="location.gpsCoordinates.lat" id="lat" class="form-control"
+                                value="<%= apartment.location.gpsCoordinates.lat %>" step="any" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="lng" class="form-label">Longitud</label>
+                            <input type="number" name="location.gpsCoordinates.lng" id="lng" class="form-control"
+                                value="<%= apartment.location.gpsCoordinates.lng %>" step="any" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Servicios</label>
+                        <div class="row g-2">
+                            <% const s=apartment.services || {}; %>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[airConditioning]"
+                                            value="true" <%=s.airConditioning ? 'checked' : '' %>
+                                        id="airConditioningEdit">
+                                        <label class="form-check-label" for="airConditioningEdit">
+                                            <i class="bi bi-snow text-black me-1"></i>Aire acondicionado
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[heating]"
+                                            value="true" <%=s.heating ? 'checked' : '' %> id="heatingEdit">
+                                        <label class="form-check-label" for="heatingEdit">
+                                            <i class="bi bi-fire text-black me-1"></i>Calefacción
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[accessibility]"
+                                            value="true" <%=s.accessibility ? 'checked' : '' %> id="accessibilityEdit">
+                                        <label class="form-check-label" for="accessibilityEdit">
+                                            <i class="bi bi-person-wheelchair text-black me-1"></i>Accesibilidad
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[television]"
+                                            value="true" <%=s.television ? 'checked' : '' %> id="televisionEdit">
+                                        <label class="form-check-label" for="televisionEdit">
+                                            <i class="bi bi-tv text-black me-1"></i>Televisión
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[kitchen]"
+                                            value="true" <%=s.kitchen ? 'checked' : '' %> id="kitchenEdit">
+                                        <label class="form-check-label" for="kitchenEdit">
+                                            <i class="bi bi-cup-hot text-black me-1"></i>Cocina
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[internet]"
+                                            value="true" <%=s.internet ? 'checked' : '' %> id="internetEdit">
+                                        <label class="form-check-label" for="internetEdit">
+                                            <i class="bi bi-wifi text-black me-1"></i>Internet
+                                        </label>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="active" name="active" value="true"
+                            <%=apartment.active ? 'checked' : '' %>>
+                        <label class="form-check-label" for="active">
+                            Apartamento activo
+                        </label>
+                    </div>
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <a href="/admin/apartments" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+                <% } else { %>
+                    <p class="text-center my-5">No hay apartamentos disponibles.</p>
+                    <% } %>
+    </div>
+
+    <%- include("templates/footer") %>

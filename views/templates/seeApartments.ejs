@@ -1,77 +1,93 @@
-<% if (dataApartments && dataApartments.length> 0) { %>
-    <div class="d-flex justify-content-center my-5">
-        <div class="row g-5 w-100 justify-content-between" style="max-width: 1100px; margin: auto;">
-            <% dataApartments.forEach(function(apartment) { %>
-                <div class="col-lg-4 col-md-6 mb-5">
-                    <div class="card h-100 shadow-sm">
-                        <% const mainPhoto=apartment.photos.find(photo=> photo.isMain); %>
-                            <% if (mainPhoto) { %>
-                                <img src="<%= mainPhoto.url %>" class="card-img-top" alt="Foto principal"
-                                    style="height: 250px; object-fit: cover;">
-                                <% } else { %>
-                                    <img src="/img/default.jpg" class="card-img-top" alt="Sin foto disponible"
-                                        style="height: 250px; object-fit: cover;">
-                                    <% } %>
-                                        <div class="card-body d-flex flex-column p-4">
-                                            <h5 class="card-title fs-5">
-                                                <a href="/apartments/<%= apartment._id %>"
-                                                    class="text-decoration-none text-dark">
-                                                    <%= apartment.title %>
-                                                </a>
-                                            </h5>
 
-                                            <p class="card-text mb-3">
-                                                <strong>Precio:</strong>
-                                                <%= apartment.price %> €/noche<br>
-                                                    <strong>M²:</strong>
-                                                    <%= apartment.squareMeters %> m²
-                                            </p>
+<% if (dataApartments && dataApartments.length > 0) { %>
+<div class="container my-5 pt-5">
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    <% dataApartments.forEach(function(apartment) { %>
+      <div class="col-12">
+        <div class="card shadow-sm flex-row overflow-hidden">
+          <% const mainPhoto = apartment.photos.find(photo => photo.isMain); %>
+          <div class="col-md-4">
+            <% if (mainPhoto) { %>
+              <img src="<%= mainPhoto.url %>" alt="Foto principal" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 100%; max-height: 100%; object-fit: cover;">
+            <% } else { %>
+              <img src="/img/default.jpg" alt="Sin foto disponible" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 100%; max-height: 100%; object-fit: cover;">
+            <% } %>
+          </div>
 
-                                            <p class="card-text text-muted small">
-                                                <strong>Servicios:</strong><br>
-                                                <% if (apartment.services.airConditioning) { %>
-                                                    <i class="bi bi-snow text-black me-1" data-bs-toggle="tooltip"
-                                                        title="Aire Acondicionado"></i> |
-                                                    <% } %>
-                                                        <% if (apartment.services.heating) { %>
-                                                            <i class="bi bi-fire text-black me-1"
-                                                                data-bs-toggle="tooltip" title="Calefacción"></i> |
-                                                            <% } %>
-                                                                <% if (apartment.services.accessibility) { %>
-                                                                    <i class="bi bi-person-wheelchair text-black me-1"
-                                                                        data-bs-toggle="tooltip"
-                                                                        title="Accesibilidad"></i> |
-                                                                    <% } %>
-                                                                        <% if (apartment.services.television) { %>
-                                                                            <i class="bi bi-tv text-black me-1"
-                                                                                data-bs-toggle="tooltip"
-                                                                                title="Televisión"></i> |
-                                                                            <% } %>
-                                                                                <% if (apartment.services.kitchen) { %>
-                                                                                    <i class="bi bi-cup-hot text-black me-1"
-                                                                                        data-bs-toggle="tooltip"
-                                                                                        title="Cocina"></i> |
-                                                                                    <% } %>
-                                                                                        <% if
-                                                                                            (apartment.services.internet)
-                                                                                            { %>
-                                                                                            <i class="bi bi-wifi text-black me-1"
-                                                                                                data-bs-toggle="tooltip"
-                                                                                                title="Conexión Wi-Fi"></i>
-                                                                                            <% } %>
-                                            </p>
-                                            <div class="mt-auto d-flex gap-3">
-                                                <a href="/apartments/<%= apartment._id %>"
-                                                    class="btn btn-outline-primary">Ver detalles</a>
-                                                <a href="/apartments/<%= apartment._id %>#reservation"
-                                                    class="btn btn-outline-primary">Reservar</a>
-                                            </div>
-                                        </div>
-                    </div>
-                </div>
+          <div class="card-body d-flex flex-column justify-content-between col-md-8 p-4">
+            <div>
+              <h5 class="card-title mb-2">
+                <a href="/apartments/<%= apartment._id %>" class="text-decoration-none text-dark">
+                  <%= apartment.title %>
+                </a>
+              </h5>
+              <p class="card-text mb-3 small">
+                <strong>Precio:</strong> <%= apartment.price %> €/noche <br>
+                <strong>Metros cuadrados:</strong> <%= apartment.squareMeters %> m²<br>
+                <strong>Ubicación:</strong> <%= apartment.location.city %>, <%= apartment.location.province %><br>
+                <strong>Máx. Huéspedes:</strong> <%= apartment.maxGuests %><br>
+                <strong>Habitaciones:</strong> <%= apartment.rooms %> |
+                <strong>Baños:</strong> <%= apartment.bathrooms %><br>
+                <strong>Camas:</strong>
+                <% apartment.bedsPerRoom.forEach(function(beds, index) { %>
+                  <%= beds %><%= index < apartment.bedsPerRoom.length - 1 ? ', ' : '' %>
                 <% }); %>
+              </p>
+              <p class="text-muted small mb-0">
+                <strong>Servicios:</strong><br>
+                <% if (apartment.services.airConditioning) { %>
+                  <i class="bi bi-snow me-2" title="Aire acondicionado" data-bs-toggle="tooltip"></i>
+                <% } %>
+                <% if (apartment.services.heating) { %>
+                  <i class="bi bi-fire me-2" title="Calefacción" data-bs-toggle="tooltip"></i>
+                <% } %>
+                <% if (apartment.services.accessibility) { %>
+                  <i class="bi bi-person-wheelchair me-2" title="Accesibilidad" data-bs-toggle="tooltip"></i>
+                <% } %>
+                <% if (apartment.services.television) { %>
+                  <i class="bi bi-tv me-2" title="Televisión" data-bs-toggle="tooltip"></i>
+                <% } %>
+                <% if (apartment.services.kitchen) { %>
+                  <i class="bi bi-cup-hot me-2" title="Cocina" data-bs-toggle="tooltip"></i>
+                <% } %>
+                <% if (apartment.services.internet) { %>
+                  <i class="bi bi-wifi me-2" title="Internet" data-bs-toggle="tooltip"></i>
+                <% } %>
+              </p>
+            </div>
+
+            <div class="mt-3 d-flex gap-2 flex-wrap">
+              <a href="/apartments/<%= apartment._id %>" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+              <a href="/apartments/<%= apartment._id %>#reservation" class="btn btn-outline-primary btn-sm d-none btn-reserve">Reservar</a>
+              <a href="/admin/apartments/<%= apartment._id %>/edit" class="btn btn-outline-primary btn-sm d-none btn-edit">Editar</a>
+            </div>
+          </div>
         </div>
-    </div>
-    <% } else { %>
-        <p class="text-center my-5">No hay apartamentos disponibles.</p>
-        <% } %>
+      </div>
+    <% }); %>
+  </div>
+</div>
+<% } else { %>
+  <p class="text-center my-5">No hay apartamentos disponibles.</p>
+<% } %>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const isAdminPage = window.location.href.includes("admin");
+  const editButtons = document.querySelectorAll(".btn-edit");
+  const reserveButtons = document.querySelectorAll(".btn-reserve");
+
+  if (isAdminPage) {
+    editButtons.forEach(btn => btn.classList.remove("d-none"));
+  } else {
+    reserveButtons.forEach(btn => btn.classList.remove("d-none"));
+  }
+
+  // Activar tooltips Bootstrap
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+</script>
+
