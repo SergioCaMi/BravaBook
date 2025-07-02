@@ -1,5 +1,5 @@
 import { Apartment, Reservation } from "../models/bravabook.model.js";
-import { getRenderObject } from "../utils/getRender.js";
+import { getRenderObject, getPaginatedData } from "../utils/getRender.js";
 
 // // ********** Función para renderizar con todos los datos necesarios **********
 // export function getRenderObject(
@@ -35,6 +35,7 @@ import { getRenderObject } from "../utils/getRender.js";
 // *** Mostramos todos los apartamentos activos ***
 export const getAllApartments = async (req, res) => {
   try {
+    const pagination = await getPaginatedData(Apartment, { active: true }, req, 6);
     const dataApartments = await Apartment.find({ active: true }).limit(12);
     const renderData = getRenderObject(
       "Inicio",
@@ -46,7 +47,7 @@ export const getAllApartments = async (req, res) => {
       "home"
     );
     console.log("desde GET / hasta home.ejs");
-    res.status(200).render("home.ejs", renderData);
+res.status(200).render("home.ejs", { ...renderData, ...pagination });
   } catch (error) {
     console.error("Error al obtener apartamentos:", error);
     res.status(500).render("error.ejs", {

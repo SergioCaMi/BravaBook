@@ -1,8 +1,6 @@
 import { Apartment, Reservation } from "../models/bravabook.model.js";
 // import { getRenderObject } from '../controller/bravabookControllers.js';
-import { getRenderObject } from '../utils/getRender.js';
-
-
+import { getRenderObject, getPaginatedData } from "../utils/getRender.js";
 
 // ******************** Endpoint de Admnin ********************
 // *** Mostramos la pagina de administradores ***
@@ -36,7 +34,6 @@ export const getNewApartment = async (req, res) => {
 
   res.status(200).render("addApartment.ejs", renderData);
 };
-
 
 // ******************** Recuperamos datos del nuevo apartamento ********************
 // *** Procesamos los datos del nuevo apartamento y lo guardamos en la BBDD ***
@@ -137,7 +134,6 @@ export const postNewApartment = async (req, res) => {
   }
 };
 
-
 // ********** Reservas **********
 // *** Mostramos todas las reservas ***
 export const getReservations = async (req, res) => {
@@ -163,7 +159,6 @@ export const getReservations = async (req, res) => {
   }
 };
 
-
 // ******************** Listar apartamentos ********************
 // *** Mostramos todos los apartamentos ***
 export const getAllApartments = async (req, res) => {
@@ -179,7 +174,8 @@ export const getAllApartments = async (req, res) => {
       "home"
     );
     console.log("desde GET / hasta home.ejs");
-    res.status(200).render("searchApartmens.ejs", renderData);
+    const pagination = await getPaginatedData(Apartment,{  }, req, 6 );
+    res.status(200).render("searchApartmens.ejs", { ...renderData, ...pagination });
   } catch (error) {
     console.error("Error al obtener apartamentos:", error);
     res.status(500).render("error.ejs", {
@@ -187,8 +183,7 @@ export const getAllApartments = async (req, res) => {
       status: 404,
     });
   }
-}
-
+};
 
 // ********** Detalle del apartamento por :id **********
 // *** Mostramos datos de un apartamento en partícular con un :id ***
@@ -219,5 +214,4 @@ export const getAdminEdit = async (req, res) => {
   }
 };
 
-export const putAdminEdit = async (req, res) => {
-};
+export const putAdminEdit = async (req, res) => {};

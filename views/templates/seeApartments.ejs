@@ -1,93 +1,152 @@
+<% if (dataApartments && dataApartments.length> 0) { %>
+    <div class="container my-5 pt-5">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <% dataApartments.forEach(function(apartment) { %>
+                <div class="col-12">
+                    <div class="card shadow-sm flex-row overflow-hidden">
+                        <% const mainPhoto=apartment.photos.find(photo=> photo.isMain); %>
+                            <div class="col-md-4">
+                                <% if (mainPhoto) { %>
+                                    <img src="<%= mainPhoto.url %>" alt="Foto principal"
+                                        class="img-fluid h-100 w-100 object-fit-cover"
+                                        style="min-height: 100%; max-height: 100%; object-fit: cover;">
+                                    <% } else { %>
+                                        <img src="/img/default.jpg" alt="Sin foto disponible"
+                                            class="img-fluid h-100 w-100 object-fit-cover"
+                                            style="min-height: 100%; max-height: 100%; object-fit: cover;">
+                                        <% } %>
+                            </div>
 
-<% if (dataApartments && dataApartments.length > 0) { %>
-<div class="container my-5 pt-5">
-<div class="row row-cols-1 row-cols-md-2 g-4">
-    <% dataApartments.forEach(function(apartment) { %>
-      <div class="col-12">
-        <div class="card shadow-sm flex-row overflow-hidden">
-          <% const mainPhoto = apartment.photos.find(photo => photo.isMain); %>
-          <div class="col-md-4">
-            <% if (mainPhoto) { %>
-              <img src="<%= mainPhoto.url %>" alt="Foto principal" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 100%; max-height: 100%; object-fit: cover;">
-            <% } else { %>
-              <img src="/img/default.jpg" alt="Sin foto disponible" class="img-fluid h-100 w-100 object-fit-cover" style="min-height: 100%; max-height: 100%; object-fit: cover;">
-            <% } %>
-          </div>
+                            <div class="card-body d-flex flex-column justify-content-between col-md-8 p-4">
+                                <div>
+                                    <h5 class="card-title mb-2">
+                                        <a href="/apartments/<%= apartment._id %>"
+                                            class="text-decoration-none text-dark">
+                                            <%= apartment.title %>
+                                        </a>
+                                    </h5>
+                                    <p class="card-text mb-3 small">
+                                        <strong>Precio:</strong>
+                                        <%= apartment.price %> €/noche <br>
+                                            <strong>Metros cuadrados:</strong>
+                                            <%= apartment.squareMeters %> m²<br>
+                                                <strong>Ubicación:</strong>
+                                                <%= apartment.location.city %>, <%= apartment.location.province %><br>
+                                                        <strong>Máx. Huéspedes:</strong>
+                                                        <%= apartment.maxGuests %><br>
+                                                            <strong>Habitaciones:</strong>
+                                                            <%= apartment.rooms %> |
+                                                                <strong>Baños:</strong>
+                                                                <%= apartment.bathrooms %><br>
+                                                                    <strong>Camas:</strong>
+                                                                    <% apartment.bedsPerRoom.forEach(function(beds,
+                                                                        index) { %>
+                                                                        <%= beds %>
+                                                                            <%= index < apartment.bedsPerRoom.length - 1
+                                                                                ? ', ' : '' %>
+                                                                                <% }); %>
+                                    </p>
+                                    <p class="text-muted small mb-0">
+                                        <strong>Servicios:</strong><br>
+                                        <% if (apartment.services.airConditioning) { %>
+                                            <i class="bi bi-snow me-2" title="Aire acondicionado"
+                                                data-bs-toggle="tooltip"></i>
+                                            <% } %>
+                                                <% if (apartment.services.heating) { %>
+                                                    <i class="bi bi-fire me-2" title="Calefacción"
+                                                        data-bs-toggle="tooltip"></i>
+                                                    <% } %>
+                                                        <% if (apartment.services.accessibility) { %>
+                                                            <i class="bi bi-person-wheelchair me-2"
+                                                                title="Accesibilidad" data-bs-toggle="tooltip"></i>
+                                                            <% } %>
+                                                                <% if (apartment.services.television) { %>
+                                                                    <i class="bi bi-tv me-2" title="Televisión"
+                                                                        data-bs-toggle="tooltip"></i>
+                                                                    <% } %>
+                                                                        <% if (apartment.services.kitchen) { %>
+                                                                            <i class="bi bi-cup-hot me-2" title="Cocina"
+                                                                                data-bs-toggle="tooltip"></i>
+                                                                            <% } %>
+                                                                                <% if (apartment.services.internet) { %>
+                                                                                    <i class="bi bi-wifi me-2"
+                                                                                        title="Internet"
+                                                                                        data-bs-toggle="tooltip"></i>
+                                                                                    <% } %>
+                                    </p>
+                                </div>
 
-          <div class="card-body d-flex flex-column justify-content-between col-md-8 p-4">
-            <div>
-              <h5 class="card-title mb-2">
-                <a href="/apartments/<%= apartment._id %>" class="text-decoration-none text-dark">
-                  <%= apartment.title %>
-                </a>
-              </h5>
-              <p class="card-text mb-3 small">
-                <strong>Precio:</strong> <%= apartment.price %> €/noche <br>
-                <strong>Metros cuadrados:</strong> <%= apartment.squareMeters %> m²<br>
-                <strong>Ubicación:</strong> <%= apartment.location.city %>, <%= apartment.location.province %><br>
-                <strong>Máx. Huéspedes:</strong> <%= apartment.maxGuests %><br>
-                <strong>Habitaciones:</strong> <%= apartment.rooms %> |
-                <strong>Baños:</strong> <%= apartment.bathrooms %><br>
-                <strong>Camas:</strong>
-                <% apartment.bedsPerRoom.forEach(function(beds, index) { %>
-                  <%= beds %><%= index < apartment.bedsPerRoom.length - 1 ? ', ' : '' %>
+                                <div class="mt-3 d-flex gap-2 flex-wrap">
+                                    <a href="/apartments/<%= apartment._id %>"
+                                        class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                                    <a href="/apartments/<%= apartment._id %>#reservation"
+                                        class="btn btn-outline-primary btn-sm d-none btn-reserve">Reservar</a>
+                                    <a href="/admin/apartments/<%= apartment._id %>/edit"
+                                        class="btn btn-outline-primary btn-sm d-none btn-edit">Editar</a>
+                                </div>
+                            </div>
+                    </div>
+                </div>
                 <% }); %>
-              </p>
-              <p class="text-muted small mb-0">
-                <strong>Servicios:</strong><br>
-                <% if (apartment.services.airConditioning) { %>
-                  <i class="bi bi-snow me-2" title="Aire acondicionado" data-bs-toggle="tooltip"></i>
-                <% } %>
-                <% if (apartment.services.heating) { %>
-                  <i class="bi bi-fire me-2" title="Calefacción" data-bs-toggle="tooltip"></i>
-                <% } %>
-                <% if (apartment.services.accessibility) { %>
-                  <i class="bi bi-person-wheelchair me-2" title="Accesibilidad" data-bs-toggle="tooltip"></i>
-                <% } %>
-                <% if (apartment.services.television) { %>
-                  <i class="bi bi-tv me-2" title="Televisión" data-bs-toggle="tooltip"></i>
-                <% } %>
-                <% if (apartment.services.kitchen) { %>
-                  <i class="bi bi-cup-hot me-2" title="Cocina" data-bs-toggle="tooltip"></i>
-                <% } %>
-                <% if (apartment.services.internet) { %>
-                  <i class="bi bi-wifi me-2" title="Internet" data-bs-toggle="tooltip"></i>
-                <% } %>
-              </p>
-            </div>
-
-            <div class="mt-3 d-flex gap-2 flex-wrap">
-              <a href="/apartments/<%= apartment._id %>" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-              <a href="/apartments/<%= apartment._id %>#reservation" class="btn btn-outline-primary btn-sm d-none btn-reserve">Reservar</a>
-              <a href="/admin/apartments/<%= apartment._id %>/edit" class="btn btn-outline-primary btn-sm d-none btn-edit">Editar</a>
-            </div>
-          </div>
         </div>
-      </div>
-    <% }); %>
-  </div>
-</div>
-<% } else { %>
-  <p class="text-center my-5">No hay apartamentos disponibles.</p>
+<% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center my-4">
+      
+      <% 
+        const maxVisiblePages = 5;
+        let startPage = Math.max(currentPage - Math.floor(maxVisiblePages / 2), 1);
+        let endPage = startPage + maxVisiblePages - 1;
+
+        if (endPage > totalPages) {
+          endPage = totalPages;
+          startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+        }
+      %>
+      <% if (startPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= startPage - 1 %>" aria-label="Anterior">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      <% } %>
+      <% for (let i = startPage; i <= endPage; i++) { %>
+        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+        </li>
+      <% } %>
+      <% if (endPage < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= endPage + 1 %>" aria-label="Siguiente">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      <% } %>
+
+    </ul>
+  </nav>
 <% } %>
+    </div>
+    <% } else { %>
+        <p class="text-center my-5">No hay apartamentos disponibles.</p>
+        <% } %>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const isAdminPage = window.location.href.includes("admin");
-  const editButtons = document.querySelectorAll(".btn-edit");
-  const reserveButtons = document.querySelectorAll(".btn-reserve");
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const isAdminPage = window.location.href.includes("admin");
+                    const editButtons = document.querySelectorAll(".btn-edit");
+                    const reserveButtons = document.querySelectorAll(".btn-reserve");
 
-  if (isAdminPage) {
-    editButtons.forEach(btn => btn.classList.remove("d-none"));
-  } else {
-    reserveButtons.forEach(btn => btn.classList.remove("d-none"));
-  }
+                    if (isAdminPage) {
+                        editButtons.forEach(btn => btn.classList.remove("d-none"));
+                    } else {
+                        reserveButtons.forEach(btn => btn.classList.remove("d-none"));
+                    }
 
-  // Activar tooltips Bootstrap
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
-});
-</script>
-
+                    // Activar tooltips Bootstrap
+                    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                });
+            </script>
