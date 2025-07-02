@@ -35,8 +35,8 @@ import { getRenderObject, getPaginatedData } from "../utils/getRender.js";
 // *** Mostramos todos los apartamentos activos ***
 export const getAllApartments = async (req, res) => {
   try {
-    const pagination = await getPaginatedData(Apartment, { active: true }, req, 6);
-    const dataApartments = await Apartment.find({ active: true }).limit(12);
+    // const pagination = await getPaginatedData(Apartment, { active: true }, req, 6);
+    const dataApartments = await Apartment.find({ active: true }).limit(6);
     const renderData = getRenderObject(
       "Inicio",
       dataApartments,
@@ -48,7 +48,8 @@ export const getAllApartments = async (req, res) => {
       "home"
     );
     console.log("desde GET / hasta home.ejs");
-res.status(200).render("home.ejs", { ...renderData, ...pagination });
+    console.log(renderData.dataApartments.length);
+res.status(200).render("home.ejs", renderData );
   } catch (error) {
     console.error("Error al obtener apartamentos:", error);
     res.status(500).render("error.ejs", {

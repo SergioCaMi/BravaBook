@@ -314,7 +314,6 @@ export const putAdminEdit = async (req, res) => {
     const apartment = await Apartment.findByIdAndUpdate(id, updateApartment, {
       new: true,
     });
-    console.log(apartment);
     const renderData = getRenderObject(
       "Inicio",
       apartment,
