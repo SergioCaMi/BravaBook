@@ -146,15 +146,21 @@
           <div class="row g-3 mb-4">
             <div class="col-md-4">
               <label for="provinceSelect" class="form-label">Selecciona una provincia:</label>
-              <select id="provinceSelect" name="location[province]" class="form-control form-select mb-3">
+              <select id="provinceSelect" name="location[province]" class="form-control form-select mb-3" required>
                 <option value="">-- Selecciona una provincia --</option>
               </select>
+                <div class="invalid-feedback">
+    Por favor, selecciona una provincia.
+  </div>
             </div>
             <div class="col-md-4">
               <label for="municipalitySelect" class="form-label">Selecciona un municipio:</label>
-              <select id="municipalitySelect" name="location[city]" class="form-control form-select">
+              <select id="municipalitySelect" name="location[city]" class="form-control form-select" required>
                 <option value="">-- Selecciona un municipio --</option>
               </select>
+              <div class="invalid-feedback">
+    Por favor, selecciona un municipio.
+  </div>
             </div>
             <div class="col-md-2">
               <label for="location[gpsCoordinates][lat]" class="form-label">Latitud (GPS):</label>

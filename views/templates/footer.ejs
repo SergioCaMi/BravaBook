@@ -46,6 +46,40 @@
                 photosGroup.classList.remove('is-invalid');
             }
 
+
+   // --- Validación de provincia ---
+    const provinceSelect = document.getElementById('provinceSelect');
+    const provinceFeedback = document.querySelector('#provinceSelect + .invalid-feedback');
+
+    provinceSelect.classList.remove('is-valid', 'is-invalid');
+
+    if (!provinceSelect.value || provinceSelect.value.trim() === '') {
+      provinceSelect.classList.add('is-invalid');
+      if (provinceFeedback) provinceFeedback.style.display = 'block';
+      isValid = false;
+    } else {
+      provinceSelect.classList.add('is-valid');
+      if (provinceFeedback) provinceFeedback.style.display = 'none';
+    }
+
+    // --- Validación de municipio ---
+    const municipalitySelect = document.getElementById('municipalitySelect');
+    const municipalityFeedback = document.querySelector('#municipalitySelect + .invalid-feedback');
+
+    municipalitySelect.classList.remove('is-valid', 'is-invalid');
+
+    if (!municipalitySelect.value || municipalitySelect.value.trim() === '') {
+      municipalitySelect.classList.add('is-invalid');
+      if (municipalityFeedback) municipalityFeedback.style.display = 'block';
+      isValid = false;
+    } else {
+      municipalitySelect.classList.add('is-valid');
+      if (municipalityFeedback) municipalityFeedback.style.display = 'none';
+    }
+
+
+
+
             // Si falla alguna validación, evita el envío
             if (!isValid || !form.checkValidity()) {
                 e.preventDefault();
@@ -163,7 +197,7 @@
 
     <div class="mb-2">
       <label for="photos[${photoCount}][url]" class="form-label">URL de la foto:</label>
-      <input type="text" name="photos[${photoCount}][url]" class="form-control" required />
+      <input type="url" name="photos[${photoCount}][url]" class="form-control" required />
     </div>
 
     <div class="mb-2">
