@@ -21,131 +21,157 @@
     </ul> -->
   </h1>
   <div class="container">
-    <form action="/admin/apartment" method="post">
-      <div class="row g-3 mb-4">
-        <div class="col-md-6">
-          <label for="title" class="form-label">Título del apartamento</label>
-          <input type="text" name="title" id="title" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label for="description" class="form-label">Descripción</label>
-          <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
-        </div>
+    <% if (typeof errors !=="undefined" && errors.length> 0) { %>
+      <div class="alert alert-danger">
+        <ul>
+          <% errors.forEach(function(error) { %>
+            <li>
+              <%= error.msg %>
+            </li>
+            <% }); %>
+        </ul>
       </div>
-      <div class="row g-3 mb-4">
-        <div class="col-md-12">
-          <label class="form-label">Reglas</label>
-          <div id="rulesContainer"></div>
-          <button type="button" onclick="addRuleField()" class="btn btn-outline-secondary btn-sm mt-2">+ Añadir
-            norma</button>
-        </div>
-      </div>
-      <div class="row g-3 mb-4">
-        <div class="col-md-6">
-          <label for="rooms" class="form-label">Número de habitaciones</label>
-          <input type="number" name="rooms" id="rooms" min="1" class="form-control" required />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Camas por habitación</label>
-          <div id="bedsContainer"></div>
-        </div>
-      </div>
-      <div class="row g-3 mb-4">
-        <div class="col-md-6">
-          <label for="bathrooms" class="form-label">Número de baños</label>
-          <input type="number" name="bathrooms" id="bathrooms" min="1" class="form-control" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Fotos</label>
-          <div id="photosContainer"></div>
-          <button type="button" onclick="addPhotoField()" class="btn btn-outline-secondary btn-sm mt-2">+ Añadir
-            foto</button>
-        </div>
-      </div>
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <label for="price" class="form-label">Precio por día (€)</label>
-          <input type="number" name="price" id="price" min="0" class="form-control" required />
-        </div>
-        <div class="col-md-4">
-          <label for="maxGuests" class="form-label">Máximo de huéspedes</label>
-          <input type="number" name="maxGuests" id="maxGuests" min="1" class="form-control" required />
-        </div>
-        <div class="col-md-4">
-          <label for="squareMeters" class="form-label">Metros cuadrados</label>
-          <input type="number" name="squareMeters" id="squareMeters" min="1" class="form-control" required />
-        </div>
-      </div>
-      <div class="mb-4">
-        <legend class="form-label">Servicios</legend>
-        <div class="row g-2">
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="services[airConditioning]" class="form-check-input" id="airConditioning">
-              <label class="form-check-label" for="airConditioning">Aire acondicionado</label>
+      <% } %>
+        <form id="apartmentForm" class="needs-validation" novalidate method="post" action="/admin/apartment">
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label for="title" class="form-label">Título del apartamento</label>
+              <!-- Recuperamos datos antiguos OldData -->
+              <input type="text" name="title" id="title" class="form-control"
+                value="<%= oldData ? oldData.title : '' %>" required />
+              <div class="invalid-feedback">El título es obligatorio.</div>
+            </div>
+            <div class="col-md-6">
+              <label for="description" class="form-label">Descripción</label>
+              <textarea name="description" id="description" class="form-control" rows="3" maxlength="3000"
+                required></textarea>
+              <div class="invalid-feedback">La descripción es obligatoria.</div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="services[heating]" class="form-check-input" id="heating">
-              <label class="form-check-label" for="heating">Calefacción</label>
+          <div class="row g-3 mb-4">
+            <div class="col-md-12">
+              <label class="form-label">Reglas</label>
+              <div id="rulesContainer"></div>
+              <button type="button" onclick="addRuleField()" class="btn btn-outline-secondary btn-sm mt-2">+ Añadir
+                norma</button>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="services[accessibility]" class="form-check-input" id="accessibility">
-              <label class="form-check-label" for="accessibility">Accesibilidad</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="services[television]" class="form-check-input" id="television">
-              <label class="form-check-label" for="television">Televisión</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="services[kitchen]" class="form-check-input" id="kitchen">
-              <label class="form-check-label" for="kitchen">Cocina</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox" name="services[internet]" class="form-check-input" id="internet">
-              <label class="form-check-label" for="internet">Internet</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <label for="provinceSelect" class="form-label">Selecciona una provincia:</label>
-          <select id="provinceSelect" name="location[province]" class="form-control form-select mb-3">
-            <option value="">-- Selecciona una provincia --</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label for="municipalitySelect" class="form-label">Selecciona un municipio:</label>
-          <select id="municipalitySelect" name="location[city]" class="form-control form-select">
-            <option value="">-- Selecciona un municipio --</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label for="location[gpsCoordinates][lat]" class="form-label">Latitud (GPS):</label>
-          <input type="number" step="any" name="location[gpsCoordinates][lat]" class="form-control" />
-        </div>
-        <div class="col-md-2">
-          <label for="location[gpsCoordinates][lng]" class="form-label">Longitud (GPS):</label>
-          <input type="number" step="any" name="location[gpsCoordinates][lng]" class="form-control" />
-        </div>
-      </div>
-      <div class="d-grid gap-2">
-        <button type="submit" class="btn btn-primary">Añadir apartamento</button>
-      </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label for="rooms" class="form-label">Número de habitaciones</label>
+              <input type="number" name="rooms" id="rooms" min="1" class="form-control" required />
+              <div class="invalid-feedback">La cantidad de habitaciones es obligatoria.</div>
 
-    </form>
-    <br />
-    <a href="/">Volver al inicio</a>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Camas por habitación</label>
+              <div id="bedsContainer"></div>
+            </div>
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label for="bathrooms" class="form-label">Número de baños</label>
+              <input type="number" name="bathrooms" id="bathrooms" min="1" class="form-control" />
+            </div>
+<div class="col-md-6" id="photosGroup">
+  <label class="form-label">Fotos</label>
+  <div id="photosContainer"></div>
+  <button type="button" id="addPhotoButton" onclick="addPhotoField()" class="btn btn-outline-secondary btn-sm mt-2">Añadir foto</button>
+  <!-- Mensaje de error -->
+  <div class="invalid-feedback" id="photoUrlRequired">
+    Debes añadir al menos una foto con URL válida.
+  </div>
+</div>          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label for="price" class="form-label">Precio por noche (€)</label>
+              <input type="number" name="price" id="price" min="0" class="form-control" required />
+              <div class="invalid-feedback">El precio por noche es obligatorio.</div>
+
+            </div>
+            <div class="col-md-4">
+              <label for="maxGuests" class="form-label">Máximo de huéspedes</label>
+              <input type="number" name="maxGuests" id="maxGuests" min="1" class="form-control" required />
+              <div class="invalid-feedback">El número maximo de huéspedes es obligatorio.</div>
+
+            </div>
+            <div class="col-md-4">
+              <label for="squareMeters" class="form-label">Metros cuadrados</label>
+              <input type="number" name="squareMeters" id="squareMeters" min="1" class="form-control" required />
+              <div class="invalid-feedback">La superfície del apartamento es obligatoria.</div>
+
+            </div>
+          </div>
+          <div class="mb-4">
+            <legend class="form-label">Servicios</legend>
+            <div class="row g-2">
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" name="services[airConditioning]" class="form-check-input" id="airConditioning">
+                  <label class="form-check-label" for="airConditioning">Aire acondicionado</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" name="services[heating]" class="form-check-input" id="heating">
+                  <label class="form-check-label" for="heating">Calefacción</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" name="services[accessibility]" class="form-check-input" id="accessibility">
+                  <label class="form-check-label" for="accessibility">Accesibilidad</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" name="services[television]" class="form-check-input" id="television">
+                  <label class="form-check-label" for="television">Televisión</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" name="services[kitchen]" class="form-check-input" id="kitchen">
+                  <label class="form-check-label" for="kitchen">Cocina</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input type="checkbox" name="services[internet]" class="form-check-input" id="internet">
+                  <label class="form-check-label" for="internet">Internet</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label for="provinceSelect" class="form-label">Selecciona una provincia:</label>
+              <select id="provinceSelect" name="location[province]" class="form-control form-select mb-3">
+                <option value="">-- Selecciona una provincia --</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="municipalitySelect" class="form-label">Selecciona un municipio:</label>
+              <select id="municipalitySelect" name="location[city]" class="form-control form-select">
+                <option value="">-- Selecciona un municipio --</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="location[gpsCoordinates][lat]" class="form-label">Latitud (GPS):</label>
+              <input type="number" step="any" name="location[gpsCoordinates][lat]" class="form-control" />
+            </div>
+            <div class="col-md-2">
+              <label for="location[gpsCoordinates][lng]" class="form-label">Longitud (GPS):</label>
+              <input type="number" step="any" name="location[gpsCoordinates][lng]" class="form-control" />
+            </div>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Añadir apartamento</button>
+          </div>
+
+        </form>
+        <br />
+        <a href="/">Volver al inicio</a>
   </div>
 
   <%- include("templates/footer") %>

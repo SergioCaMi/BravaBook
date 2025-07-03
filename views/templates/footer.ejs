@@ -4,12 +4,99 @@
     crossorigin="anonymous"></script>
 <script>
 
+
+    // ********** Validación Form **********
+    (() => {
+        'use strict';
+
+        const form = document.getElementById('apartmentForm');
+
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+
+            // Validación nativa del formulario (Bootstrap)
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Validar que haya al menos una foto con URL
+            const photoInputs = document.querySelectorAll('[name*="photos"][name*="url"]');
+            let atLeastOneURL = false;
+
+            photoInputs.forEach(input => {
+                input.classList.remove('is-valid', 'is-invalid');
+                if (input.value.trim() !== '') {
+                    input.classList.add('is-valid');
+                    atLeastOneURL = true;
+                } else {
+                    input.classList.add('is-invalid');
+                }
+            });
+
+            const photoErrorFeedback = document.getElementById('photoUrlRequired');
+            const photosGroup = document.getElementById('photosGroup');
+
+            if (!atLeastOneURL) {
+                photoErrorFeedback.style.display = 'block';
+                photosGroup.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                photoErrorFeedback.style.display = 'none';
+                photosGroup.classList.remove('is-invalid');
+            }
+
+            // Si falla alguna validación, evita el envío
+            if (!isValid || !form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        });
+    })();
+
+
+    // Escuchar cambios en los campos de URL de fotos (dinámicos)
+    document.addEventListener('input', function (e) {
+        const photoInputs = document.querySelectorAll('[name*="photos"][name*="url"]');
+        const photoErrorFeedback = document.getElementById('photoUrlRequired');
+        const photosGroup = document.getElementById('photosGroup');
+
+        let atLeastOneURL = false;
+
+        photoInputs.forEach(input => {
+            input.classList.remove('is-valid', 'is-invalid');
+            if (input.value.trim() !== '') {
+                input.classList.add('is-valid');
+                atLeastOneURL = true;
+            } else {
+                input.classList.add('is-invalid');
+            }
+        });
+
+        if (atLeastOneURL) {
+            photoErrorFeedback.style.display = 'none';
+            photosGroup.classList.remove('is-invalid');
+        } else {
+            photoErrorFeedback.style.display = 'block';
+            photosGroup.classList.add('is-invalid');
+        }
+    });
+
+
+
+
     document.addEventListener("DOMContentLoaded", () => {
         // ********** ToolTips **********
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
+
+
+
+
 
         // ********** Función para añadir camas **********
 
@@ -70,27 +157,28 @@
     function addPhotoField() {
         const container = document.getElementById('photosContainer');
         const fieldset = document.createElement('fieldset');
-        fieldset.className = 'photo-fieldset';
+        fieldset.className = 'mb-3 p-3 border rounded bg-light';
         fieldset.innerHTML = `
-      <legend>Foto ${photoCount + 1}</legend>
+    <legend class="h6">Foto ${photoCount + 1}</legend>
 
-      <label for="photos[${photoCount}][url]">URL de la foto:</label>
-      <input type="text" name="photos[${photoCount}][url]" required /><br>
+    <div class="mb-2">
+      <label for="photos[${photoCount}][url]" class="form-label">URL de la foto:</label>
+      <input type="text" name="photos[${photoCount}][url]" class="form-control" required />
+    </div>
 
-      <label for="photos[${photoCount}][description]">Descripción:</label>
-      <input type="text" name="photos[${photoCount}][description]" />
+    <div class="mb-2">
+      <label for="photos[${photoCount}][description]" class="form-label">Descripción:</label>
+      <input type="text" name="photos[${photoCount}][description]" class="form-control" />
+    </div>
 
-      <label>
-        <input type="radio" name="mainPhotoIndex" value="${photoCount}" ${photoCount === 0 ? 'checked' : ''} />
-        Foto Principal
-      </label>
-
-      <hr />
-    `;
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="radio" name="mainPhotoIndex" value="${photoCount}" ${photoCount === 0 ? 'checked' : ''}>
+      <label class="form-check-label">Foto Principal</label>
+    </div>
+  `;
         container.appendChild(fieldset);
         photoCount++;
     }
-
     // ********** Función para añadir normas **********
     let ruleCount = 0;
 

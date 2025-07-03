@@ -3,6 +3,8 @@ const router = express.Router();
 import { Apartment, Reservation } from "../models/bravabook.model.js";
 // *** Admin ***
 import { getAdminPanel, getNewApartment, postNewApartment, getReservations, getAllApartments, getAdminEdit, putAdminEdit } from '../controller/bravabookAdminControllers.js';
+// ********** Validaciones por Express **********
+import { apartmentValidation } from "../validations/apartmentValidation.js";
 
 // *** Usuario ***
 // import { getAllApartments, getAbout, getContact, getReservations } from '../controller/bravabookControllers.js';
@@ -21,7 +23,7 @@ router.get("/apartment/new", getNewApartment);
 
 // ******************** Recuperamos datos del apartamento para guardarlo ********************
 // *** Procesamos los datos del apartamento y lo guardamos en la BBDD ***
-router.post("/apartment", postNewApartment);
+router.post("/apartment", apartmentValidation, postNewApartment);
 
 // ******************** Formulario para editarun apartamento ********************
 // *** Mostramos El formulario para editar un apartamento ***
@@ -29,7 +31,7 @@ router.get("/apartments/:id/edit", getAdminEdit);
 
 // ******************** Recuperamos datos del apartamento para editarlo ********************
 // *** Procesamos los datos del apartamento y lo actualizamos en la BBDD ***
-router.post("/apartment/:id/edit/save", putAdminEdit);
+router.post("/apartment/:id/edit/save", apartmentValidation, putAdminEdit);
 
 
 // ********** Reservas **********

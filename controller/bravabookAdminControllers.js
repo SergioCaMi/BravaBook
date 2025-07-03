@@ -1,6 +1,6 @@
 import { Apartment, Reservation } from "../models/bravabook.model.js";
-// import { getRenderObject } from '../controller/bravabookControllers.js';
 import { getRenderObject, getPaginatedData } from "../utils/getRender.js";
+import { validationResult } from "express-validator";
 
 // ******************** Endpoint de Admnin ********************
 // *** Mostramos la pagina de administradores ***
@@ -32,17 +32,16 @@ export const getNewApartment = async (req, res) => {
     1,
     "admin"
   );
-  console.log("ROL:", renderData.currentPage);
-  console.log("addApartment.ejs");
-  console.log("desde GET /admin/apartment/new hasta addApartment.ejs");
-
-  res.status(200).render("addApartment.ejs", renderData);
+  res
+    .status(200)
+    .render("addApartment.ejs", { ...renderData, oldData: {}, errors: [] });
 };
 
 // ******************** Recuperamos datos del nuevo apartamento ********************
 // *** Procesamos los datos del nuevo apartamento y lo guardamos en la BBDD ***
 export const postNewApartment = async (req, res) => {
   console.log(req.body);
+  const errors = validationResult(req);
   try {
     const {
       title,
@@ -133,7 +132,11 @@ export const postNewApartment = async (req, res) => {
       1,
       "admin"
     );
-    res.status(200).render("adminApartment.ejs", renderData);
+    res.status(200).render("adminApartment.ejs", {
+      ...renderData,
+      errors: errors.array(),
+      oldData: req.body,
+    });
   } catch (error) {
     console.error("Error:", error);
   }
@@ -216,7 +219,9 @@ export const getAdminEdit = async (req, res) => {
       "admin"
     );
 
-    res.status(200).render("editApartment.ejs", renderData);
+    res
+      .status(200)
+      .render("editApartment.ejs", { ...renderData, oldData: {}, errors: [] });
   } catch (err) {
     res.status(500).render("error.ejs", {
       message: "Error interno del servidor",
@@ -225,14 +230,9 @@ export const getAdminEdit = async (req, res) => {
   }
 };
 
-
-
-
-
-
 export const putAdminEdit = async (req, res) => {
   console.log(req.body);
-
+  const errors = validationResult(req);
   const { id } = req.params;
   try {
     const {
@@ -324,9 +324,15 @@ export const putAdminEdit = async (req, res) => {
       1,
       "admin"
     );
+    const errors = validationResult(req);
     console.log("Updated!");
     const pagination = await getPaginatedData(Apartment, {}, req, 6);
-    res.status(200).render("home.ejs", { ...renderData, ...pagination });
+    res.status(200).render("home.ejs", {
+      ...renderData,
+      ...pagination,
+      errors: errors.array(),
+      oldData: req.body,
+    });
   } catch (error) {
     console.error("Error al obtener apartamentos:", error);
     res.status(500).render("error.ejs", {

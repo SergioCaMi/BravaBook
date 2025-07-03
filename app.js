@@ -7,6 +7,7 @@ import express from "express";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 // ******************** Configura la sesión del usuario ********************
 // ********** Configura una sesión segura para cada usuario **********
 app.use(
@@ -78,6 +79,7 @@ app.use("/", bravabookRoutes);
 
 const bravabookAdminRoutes = (await import("./routes/bravabookAdminRoutes.js")).default;
 app.use("/admin", bravabookAdminRoutes);
+
 
 // ****************************** Iniciar servidor ****************************************
 app.listen(PORT, () => {
